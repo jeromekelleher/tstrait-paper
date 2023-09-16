@@ -191,9 +191,7 @@ The user only needs to input the number of causal sites, trait model and the nar
 
 \section{Computational Time}
 
-\texttt{tstrait} offers a very efficient way of simulating quantitative traits based on an ARG. Figure \ref{fig:time} (A) shows how the simulation time scales with the number of individuals on simulated human genomes in \texttt{stdpopsim} \citep{adrion2020}. The only published code to simulate quantitative traits directly from ARGs is in \cite{martin2017}, which we compared with. Including other tools that require the entire genome matrix is not practical. For example, even with 1,000 individuals of 100 Mb human chromosome requires XX Gb of VCF. but it only takes 0.353 seconds to simulate quantitative traits with 1000 causal sites by using \texttt{tstrait}. Thus, the simulation time will be dominated by processing the VCF file. For larger samples, the problem is more 
-
-For example, the French Canadian dataset takes XX petabytes in the VCF format, but it is only XX Gb in the \texttt{tskit} compressed tree-sequence format and it only takes a few seconds to load and process by using the tree sequence data structure.
+\texttt{tstrait} offers a very efficient way of simulating quantitative traits based on an ARG. Figure \ref{fig:time} (A) shows how the simulation time scales with the number of individuals on simulated human genomes in \texttt{stdpopsim} \citep{adrion2020}. The only published code to simulate quantitative traits directly from ARGs is in \cite{martin2017}, which we compared with. Including other tools that require the entire genome matrix is not practical, as the simulation time will be dominated by processing the VCF file and it would not be practically to analyze a large sample VCF file on a laptop PC. For example, the Chromosome 9 French Canadian dataset takes approximately 280 terabytes in the VCF format, but it is only 1.357 Gb in the \texttt{tskit} compressed tree-sequence format and it only takes a few minutes to load and process by using the tree sequence data structure.
 
 Figure \ref{fig:time} (B) shows simulation time of \texttt{tstrait} with more realistic data. For example, \texttt{tstrait} is used to simulate traits from 2.7 million individuals in the French Canadian dataset, which is the largest known simulated genetic dataset \citep{anderson2023}. It took 60 seconds to simulate a trait with 1000 causal sites, making \texttt{tstrait} to be practical to simulate quantitative traits from this largest ever simulated dataset. The inferred ARG from the 1000 Genomes project \citep{kelleher2019} is also used to measure the computational performance.
 
@@ -216,6 +214,8 @@ No competing interest is declared.
 We greatly acknowledge helpful discussions about quantitative trait simulation with Gregor Gorjanc. We thank Ben Haller and people in the tskit community for helpful discussions and feedback. We thank Ben Jeffery for his help with the Python package development.
 
 \section{Funding}
+
+D.T. is supported by the Oxford Kobe Scholarship from the University of Oxford and the Euretta J. Kellett Fellowship from Columbia University.
 
 This work was supported by ...
 
