@@ -44,6 +44,8 @@
 
 \usepackage{minted}
 
+\usepackage{graphicx}
+
 % line numbers
 %\usepackage[mathlines, switch]{lineno}
 %\usepackage[right]{lineno}
@@ -197,7 +199,7 @@ Figure \ref{fig:time} (B) shows simulation time of \texttt{tstrait} with more re
 
 \begin{figure}[!t]%
 \centering
-\includegraphics[width=213pt]{figure.png}
+\includegraphics[width=213pt]{figure.pdf}
 \caption{\textbf{Time taken to simulate quantitative traits.} Each point represents the mean time for 10 independent runs under different random seeds. The times reported are the total CPU time required to simulate quantitative traits on an Intel(R) Core(TM) i9-11900H CPU and 16 GB of RAM.
 The trait model is a normal distribution with $\mu=0$, $\sigma^2=1$, $h^2=0.3$, and $\alpha=-1$. (A) Computational time with increasing number of individuals. The whole genome dataset from \emph{Homo sapiens} with various number of individuals and chromosome length are simulated by using \texttt{stdpopsim} \citep{adrion2020}. For each replicate of the simulation, \texttt{tstrait} is used to simulate one quantitative trait with 1000 causal sites. (B) Computational time with increasing number of causal sites on two large realistic ARGs. \texttt{tstrait} is used to simulate quantitative traits from the simulated French Canadian dataset \citep{anderson2023} and the inferred tree sequence dataset of the 1000 Genomes Project \citep{kelleher2019} with varying number of causal sites. The French Canadian dataset is downloaded from \url{https://zenodo.org/record/6839683}, and the inferred ARG from the 1000 Genomes Project is downloaded from \url{https://zenodo.org/record/3051855}. Chromosome 9 is selected for both datasets.}\label{fig:time}
 \end{figure}
