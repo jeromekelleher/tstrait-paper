@@ -1,4 +1,5 @@
-# Mertin et al. (2017) simulation
+# This simulation code is adapted from the true_prs function in https://github.com/armartin/ancestry_pipeline/blob/master/simulate_prs.py#L111
+# The simulation framework is described in Martin et al. (2017), https://www.sciencedirect.com/science/article/pii/S0002929717301076
 import numpy as np
 from dataclasses import dataclass
 

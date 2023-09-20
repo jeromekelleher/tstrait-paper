@@ -1,0 +1,8 @@
+humanize
+matplotlib
+msprime
+pandas
+stdpopsim
+tskit
+tstrait
+tszip
