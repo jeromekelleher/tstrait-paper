@@ -40,9 +40,7 @@
 
 %\usepackage{showframe}
 \usepackage{fontenc}
-\graphicspath{{Fig/}}
 
-\usepackage{minted}
 
 \usepackage{graphicx}
 
@@ -50,25 +48,14 @@
 % \usepackage[mathlines, switch]{lineno}
 % \usepackage[right]{lineno}
 
-\theoremstyle{thmstyleone}%
-\newtheorem{theorem}{Theorem}%  meant for continuous numbers
-%%\newtheorem{theorem}{Theorem}[section]% meant for sectionwise numbers
-%% optional argument [theorem] produces theorem numbering sequence instead of independent numbers for Proposition
-\newtheorem{proposition}[theorem]{Proposition}%
-%%\newtheorem{proposition}{Proposition}% to get separate numbers for theorem and proposition etc.
-\theoremstyle{thmstyletwo}%
-\newtheorem{example}{Example}%
-\newtheorem{remark}{Remark}%
-\theoremstyle{thmstylethree}%
-\newtheorem{definition}{Definition}
-
 \begin{document}
 
-\journaltitle{Bioinformatics}
-\DOI{DOI HERE}
+% \journaltitle{Bioinformatics}
+\journaltitle{Preprint}
+% \DOI{DOI HERE}
 \copyrightyear{2023}
-\pubyear{2019}
-\access{Advance Access Publication Date: Day Month Year}
+% \pubyear{2019}
+% \access{Advance Access Publication Date: Day Month Year}
 \appnotes{Paper}
 
 \firstpage{1}
@@ -83,10 +70,16 @@
 
 \authormark{D.Tagami et al.}
 
-\address[1]{\orgdiv{Department of Statistics}, \orgname{University of Oxford}, \orgaddress{\street{24-29 St Giles'}, \postcode{Oxford OX1 3LB}, \country{United Kingdom}}}
-\address[2]{\orgdiv{Big Data Institute, Li Ka Shing Centre for Health Information and Discovery}, \orgname{University of Oxford}, \orgaddress{\street{Old Road Campus}, \postcode{Oxford OX3 7LF}, \country{United Kingdom}}}
+\address[1]{\orgdiv{Department of Statistics}, \orgname{University of Oxford},
+\orgaddress{\street{24-29 St Giles'}, \postcode{Oxford OX1 3LB},
+\country{United Kingdom}}}
+\address[2]{\orgdiv{Big Data Institute,
+Li Ka Shing Centre for Health Information and Discovery},
+\orgname{University of Oxford}, \orgaddress{\street{Old Road Campus},
+\postcode{Oxford OX3 7LF}, \country{United Kingdom}}}
 
-\corresp[$\ast$]{Corresponding author. \href{email:daiki.tagami@hertford.ox.ac.uk}{daiki.tagami@hertford.ox.ac.uk}}
+\corresp[$\ast$]{Corresponding author.
+\href{email:daiki.tagami@hertford.ox.ac.uk}{daiki.tagami@hertford.ox.ac.uk}}
 
 \received{Date}{0}{Year}
 \revised{Date}{0}{Year}
@@ -109,18 +102,12 @@ development version is maintained on Github
 (\url{https://github.com/tskit-dev/tstrait}).\\ \textbf{Contact:}
 \href{daiki.tagami@hertford.ox.ac.uk}{daiki.tagami@hertford.ox.ac.uk}\\
 }
+
 %\abstract{Abstracts must be able to stand alone and so cannot contain %citations to
 %the paper's references, equations, etc. An abstract must consist of a single
 %paragraph and be concise. Because of online formatting, abstracts must appear
 %as plain as possible.}
 %\keywords{keyword1, Keyword2, Keyword3, Keyword4}
-
-% \boxedtext{
-% \begin{itemize}
-% \item Key boxed text here.
-% \item Key boxed text here.
-% \item Key boxed text here.
-% \end{itemize}}
 
 \maketitle
 
@@ -220,11 +207,11 @@ and $h^2$ is the narrow-sense heritability that is defined by the user.
 The first step of quantitative trait simulation in \texttt{tstrait} is to set
 the trait model distribution by using \emph{trait\_model} function, as in the
 following example:
-\begin{minted}{python}
+\begin{lstlisting}[language=Python]
 model = tstrait.trait_model(
-  distribution="normal", mean=0, var=1
+  distribution='normal', mean=0, var=1
 )
-\end{minted}
+\end{lstlisting}
 The \texttt{tstrait} package supports effect size simulation from five
 univariate distributions and one multivariate distribution, which are taken
 from commonly used statistical distributions to simulate effect sizes
@@ -232,11 +219,11 @@ from commonly used statistical distributions to simulate effect sizes
 is used to simulate multiple traits, assuming that they are pleiotropic. The
 trait model is used as an input of \emph{sim\_trait} function to simulate
 effect sizes:
-\begin{minted}{python}
+\begin{lstlisting}[language=Python]
 trait_df = tstrait.sim_trait(
    ts, num_causal=5, model=model
 )
-\end{minted}
+\end{lstlisting}
 \emph{ts} is the tree sequence input, and the user can set the number of causal
 sites that is affecting the trait. The output will be a \texttt{pandas}
 dataframe \citep{pandas} that describes the simulated effect sizes.
@@ -244,11 +231,11 @@ dataframe \citep{pandas} that describes the simulated effect sizes.
 \subsection{Genetic Value}
 
 Genetic value is simulated in \texttt{tstrait} by using the effect size dataframe:
-\begin{minted}{python}
+\begin{lstlisting}[language=Python]
 genetic_result = tstrait.sim_genetic(
    ts, trait_df, alpha=0
 )
-\end{minted}
+\end{lstlisting}
 \texttt{tstrait} offers flexibility in genetic value simulation, as users can
 define their own effect size dataframe, in addition to using the simulated
 output of \emph{sim\_trait} function. This allows users to use the output from
@@ -274,11 +261,11 @@ to conduct realistic simulations \citep{speed2017}.
 \subsection{Phenotype}
 
 Phenotype is simulated from \texttt{tstrait} by using \emph{sim\_env}:
-\begin{minted}{python}
+\begin{lstlisting}[language=Python]
 phenotype_df = tstrait.sim_env(
    genetic_result.genetic, h2=0.3, random_seed=1
 )
-\end{minted}
+\end{lstlisting}
 The parameters are used to simulate environmental noise from the distribution (\ref{eq:env}).
 
 After completing the simulation, \texttt{tstrait} returns two dataframes to
@@ -289,11 +276,11 @@ whenever required.
 
 Alternatively, all the above steps of the simulation can be conducted by using
 \emph{sim\_phenotype}:
-\begin{minted}{python}
+\begin{lstlisting}[language=Python]
 sim_result = tstrait.sim_phenotype(
-  ts=ts, num_causal=100, model=model, h2=0.3
+  ts, num_causal=100, model=model, h2=0.3
 )
-\end{minted}
+\end{lstlisting}
 The user only needs to input the number of causal sites, trait model and the
 narrow-sense heritability to simulate quantitative traits. By using this
 function, the user does not need to modify the details of the quantitative
