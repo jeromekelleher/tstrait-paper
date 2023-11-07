@@ -87,16 +87,25 @@ Li Ka Shing Centre for Health Information and Discovery},
 
 \abstract{
 \textbf{Summary:}
-\texttt{tstrait} is a new open-source Python library that incorporates a wide
-range of state-of-the-art algorithms for simulating quantitative traits based
-on an ancestral recombination graph (ARG). ARG is an active field of research
-in population genetics and statistical genetics due to its promising aspects in
-genome-wide association study (GWAS), and this package serves as an essential
-infrastructure for utilizing ARG in GWAS simulations. In this work, we provide
-an overview of the simulation framework that is incorporated in
-\texttt{tstrait} and highlight some recent developments in ARG.\\
-\textbf{Availability and Implementation:} \texttt{tstrait} is available as an
-open-source Python package. The full documentation with examples and workflow
+Ancestral recombination graphs (ARGs) encode the entire ensemble of correlated
+genealogical trees arising from recombination in a compact and efficient
+structure, and are of fundamental importance in population and statistical
+genetics. Recent breakthroughs have made it possible to simulate and
+infer ARGs at the population scale, and there is now intense interest
+in applying ARG-based methods across a broad range of applications.
+Genome-wide association studies (GWAS) are one of the most imporant
+application areas, with ARG-based methods already providing substantial
+improvements over the state-of-the-art. The ability to efficiently
+simulate quantitative traits is critical to developing
+and evaluating new GWAS methods, but existing simulators do not scale
+to modern datasets and cannot be directly applied to inferred or simulated ARGs.
+We present the \texttt{tstrait} package,
+an open-source Python library to simulate
+quantitative traits on ARGs, and show how this user-friendly software
+can be easily applied to vast, population-scale datasets.
+\\\textbf{Availability and Implementation:} \texttt{tstrait} is available
+for download on the Python Package Index.
+Full documentation with examples and workflow
 templates is available on \url{https://tskit.dev/tstrait/docs/}, and the
 development version is maintained on Github
 (\url{https://github.com/tskit-dev/tstrait}).\\ \textbf{Contact:}
