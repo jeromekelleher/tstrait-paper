@@ -87,7 +87,7 @@ Li Ka Shing Centre for Health Information and Discovery},
 
 \abstract{
 \textbf{Summary:}
-Ancestral recombination graphs (ARGs) encode the entire ensemble of correlated
+Ancestral recombination graphs (ARGs) encode the ensemble of correlated
 genealogical trees arising from recombination in a compact and efficient
 structure, and are of fundamental importance in population and statistical
 genetics. Recent breakthroughs have made it possible to simulate and
@@ -98,7 +98,7 @@ application areas, with ARG-based methods already providing substantial
 improvements over the state-of-the-art. The ability to efficiently
 simulate quantitative traits is critical to developing
 and evaluating new GWAS methods, but existing simulators do not scale
-to modern datasets and cannot be directly applied to inferred or simulated ARGs.
+to modern datasets and cannot be directly applied to ARGs.
 We present the \texttt{tstrait} package,
 an open-source Python library to simulate
 quantitative traits on ARGs, and show how this user-friendly software
@@ -116,19 +116,22 @@ development version is maintained on Github
 %the paper's references, equations, etc. An abstract must consist of a single
 %paragraph and be concise. Because of online formatting, abstracts must appear
 %as plain as possible.}
-%\keywords{keyword1, Keyword2, Keyword3, Keyword4}
+\keywords{Ancestral Recombination Graph, ARG, GWAS, quantitative traits}
 
 \maketitle
 
 \section{Introduction}
 
-Genome-wide association study (GWAS) tests genetic variants across the entire
-genome of individuals to identify genetic variants that are statistically
-associated with a specific trait \citep{uffelmann2021}. GWAS has successfully
-identified many loci that are associated with various human diseases and traits
-\citep{ishigaki2022,locke2015,mahajan2022,mathieson2023,yengo2022}, and GWAS
-results have actively been used in human trials and clinical practices
-\citep{visscher2017}. In spite of its advantages, population structure and
+Genome-wide association studies (GWAS)
+identify genetic variants that are statistically
+associated with a specific trait~\citep{uffelmann2021}.
+GWAS has successfully
+identified many loci that are associated with various human diseases and
+traits~\citep{locke2015,ishigaki2022,mahajan2022,yengo2022,mathieson2023},
+and GWAS results are being actively incorporated into clinical
+practice~\citep{visscher2017}.
+Despite these successes, however, there are fundamental issues with
+In spite of its advantages, population structure and
 demographic histories can heavily influence GWAS results \citep{uffelmann2021},
 so it would be necessary for researchers to implement these factors when
 conducting GWAS.
