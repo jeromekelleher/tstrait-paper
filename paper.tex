@@ -341,11 +341,13 @@ API. For convenience, we also provide a single
 effect sizes, generating genetic values and imposing environmental noise.
 
 \subsection{Performance}
-[START HERE]
-\texttt{tstrait} offers a very efficient way of simulating quantitative traits
-based on an ARG. Figure \ref{fig:time} (A) shows how the simulation time scales
-with the number of individuals on simulated human genomes in \texttt{stdpopsim}
-\citep{adrion2020}. The only published code to simulate quantitative traits
+\texttt{Tstrait} is very efficient, and can be applied to datasets at the
+largest scales.
+Fig~\ref{fig:time}A shows how the simulation time scales
+with the number of individuals using simple simulations
+of humans using \texttt{stdpopsim}~\citep{adrion2020}.
+[HERE]
+The only published code to simulate quantitative traits
 directly from ARGs is in \cite{martin2017}, which we compared with. Including
 other tools that require the entire genome matrix is not practical, as the
 simulation time will be dominated by processing the VCF file and it would not
@@ -366,6 +368,8 @@ also used to measure the computational performance.
 
 \begin{figure}[!t]%
 \centering
+% FIXME get the sizes right here and in the notebook where we're generating
+% the figure so we don't have to scale here.
 \includegraphics[width=213pt]{figures/time-scaling.pdf}
 \caption{\textbf{Time taken to simulate quantitative traits.} Each point
 represents the mean time for 10 independent runs under different random seeds.
