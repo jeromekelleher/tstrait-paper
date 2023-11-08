@@ -170,55 +170,63 @@ These simulation methods are all based on the ``succinct tree
 sequence'' ARG encoding~\citep{kelleher2019,ralph2020,wong2023general},
 using the open-source \texttt{tskit} library.
 
+An important property of the succinct tree sequence ARG encoding
+used by these population genetic simulators is that it allows us to
+store vast genetic variation datasets very compactly. Rather than
+storing the genetic sequence variation in its conventional matrix
+form, we can instead store the underlying genealogical history
+and mutations that ultimately \emph{result in} the observed
+variation~\citep{kelleher2019}.
+For example, the ultra-realistic simulations of 1.4 million
+French-Canadian individuals provided by \citet{anderson2023}
+requires around 550 GB of storage space in the
+standard gzip-compressed VCF format ($\sim$280TB uncompressed)
+for chromosome 9. The original simulation file representing
+precisely the same genetic variation data, \emph{plus} the
+complete simulated ARG, requires only 1.36GB of space
+in the compressed \texttt{tszip} format. Thus, in this
+case we achieve more than 400-fold compression,
+and this massive and otherwise highly unwieldy dataset
+becomes straightforward to work with (we discuss
+landmark dataset again in later sections).
+Another substantial benefit of storing simulated datasets
+in this ARG-based format is that many computations can
+be expressed efficiently in terms of the underlying
+ancestry~\citep{kelleher2016efficient,ralph2020}, without
+needing to decode the actual variation data.
 
+The first step of simulating data for evaluating GWAS methods,
+generating realistic genetic variation datasets of millions
+of individuals, is therefore at a high-level of sophistication
+and more than sufficient to support ongoing research.
+The second step, of generating the actual quantiative traits,
+is currently lagging far behind.
+Although there are multiple packages to simulate genotypic data
+concurrently with quantitative traits~\citep{gaynor2021,haller2023},
+and to simulate quantitative traits from a given set of genetic
+sequences~\citep[e.g.][]{meyer2018,fernandes2020}, none can
+handle the millions of samples now required.
+In particular, there is no software package available to simulate quantitative
+traits directly from the efficient ARG representation used by
+modern population genetic simulators.
 
-% ARG is especially useful in population genetic simulations, and it would be
-% possible to simulate genetic data with ancestral information by using ARG.
-% Simulation is used in GWAS to examine how population structure and demographic
-% histories influence polygenic risk score prediction
-% \citep{martin2017,zaidi2020}, because simulation is the only way to obtain
-% genetic data where the underlying demographic information is known. A succinct
-% tree sequence (or tree sequence) is a data structure for ARGs, and it is one of
-% the most popular genomic data structures in population genetic simulations
-% \citep{baumdicker2022,haller2019}, (cite "A general and efficient, ..."
-% article). Since it can efficiently store genetic information with far less data
-% size than other methods, it is an appealing choice for simulating mutation and
-% ancestry information \citep{kelleher2019}.
-
-There are multiple useful software packages to simulate genotypic data with
-quantitative traits \citep{gaynor2021,haller2023}, and to simulate quantitative
-traits from observed genetic sequences \citep{fernandes2020,meyer2018}.
-However, there does not exist any simulators that can efficiently simulate
-quantitative traits of individuals directly from an ARG. While it would be
-possible to convert a tree sequence data to a different data format and use the
-available packages to simulate quantitative traits, data conversion can be
-computationally costly and it diminishes the computational advantages of using
-tree sequence data. It would be much more efficient to analyze genetic
-information by using the tree sequence data structure, and many population
-genetic statistics can be efficiently computed from the tree structure instead
-of obtaining the genotype matrix \citep{ralph2020}.
-
-In this paper, we propose a new Python library \texttt{tstrait} to simulate
-quantitative traits of individuals in an arbitrary ARG. \texttt{tstrait} is
-built on top of \texttt{tskit} \citep{ralph2020}, which provides an efficient
-way for analyzing and processing ARGs encoded as tree sequence.
-\texttt{tstrait} utilizes the efficient data structure in the tree sequence
-data to simulate complex traits at a fast computational speed. It also provides
-an easily accessible interface by using \texttt{pandas} dataframe
-\citep{pandas} as an input and output of the simulation. Thus, \texttt{tstrait}
-can be easily integrated with other population genetic simulators as well.
-
-In addition to its computational advantages of processing tree sequence data,
-\texttt{tstrait} offers other advantages: \emph{i)} it can simulate traits even
-if the sites have multiple mutations, unlike other simulation frameworks that
-assume infinite-sites model \citep{martin2017}, \emph{ii)} it can simulate
-traits from any ancestral individuals that existed in the demographic history,
-unlike other packages that can only simulate traits from the observed genetic
-information \citep{fernandes2020,meyer2018}, and \emph{iii)} it integrates with
-Python data science packages, such as \texttt{NumPy} \citep{numpy} and
-\texttt{pandas} \citep{pandas}. Due to these advantages, we hope that
-\texttt{tstrait} can provide easily accessible state-of-art quantitative trait
-simulation for researchers who are using population genetic simulation tools.
+In this paper we present \texttt{tstrait}, a new Python library that
+efficiently simulates quantitative traits on an arbitrary ARG.
+The package is build on top of
+\texttt{tskit}~\citep{ralph2020}, which provides a powerful
+framework for storing and processing ARGs.
+Using these efficient data structures, \texttt{tstrait} can
+quickly simulate quantitative traits for population-scale datasets,
+with a very low memory overhead. This approach also provides a
+richer model than existing methods,
+allowing us to, for example, simulate traits for
+ancestral individuals as well as contemporary samples.
+The \texttt{tstrait} library also integrates well with the wider
+PyData ecosystem of data-science tools,
+using
+\texttt{NumPy} arrays~\citep{numpy} and
+\texttt{pandas} dataframes~\citep{pandas}
+as input and output.
 
 \section{Phenotypic Model}
 
