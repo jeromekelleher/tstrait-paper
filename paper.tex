@@ -116,7 +116,8 @@ development version is maintained on Github
 %the paper's references, equations, etc. An abstract must consist of a single
 %paragraph and be concise. Because of online formatting, abstracts must appear
 %as plain as possible.}
-\keywords{Ancestral Recombination Graph, ARG, GWAS, quantitative traits}
+\keywords{Ancestral Recombination Graph, ARG, GWAS, quantitative traits,
+simulation}
 
 \maketitle
 
@@ -125,40 +126,64 @@ development version is maintained on Github
 Genome-wide association studies (GWAS)
 identify genetic variants that are statistically
 associated with a specific trait~\citep{uffelmann2021}.
-GWAS has successfully
-identified many loci that are associated with various human diseases and
-traits~\citep{locke2015,ishigaki2022,mahajan2022,yengo2022,mathieson2023},
+Many loci that are associated with various human diseases and
+traits have been identified~\citep{locke2015,ishigaki2022,
+mahajan2022,yengo2022,mathieson2023},
 and GWAS results are actively being incorporated into clinical
 practice~\citep{visscher2017}.
 Despite these successes and the ongoing collection of population-scale
 Biobank data~\citep{tanjo2021practical}, there are substantial open
 questions around GWAS methology.
 In particular, correctly accounting for population stratification
-remains challenging~\citep{uffelmann2021}.
+remain challenging~\citep{uffelmann2021}.
 
-Ancestral recombination graphs (ARGs) describe the interwoven paths
-of genetic inheritance arising from recombination~\citep{wong2023general}.
-[TODO from here]
-Recent studies have shown that genealogy-based association can detect more
-ultra rare variants than conventional methods \citep{zhang2023}, using an
-ARG-based approach in quantitative-trait locus mapping can better detect causal
-locus, especially in the presence of allelic heterogeneity \citep{link2023},
-and linkage disequilibirium can be efficiently modeled in GWAS by using a
-tree-based approach \citep{salehi2023}. These recent advances make ARG to be a
-suitable data format for conducting GWAS.
+Ancestral recombination graphs (ARGs) encode the interwoven paths
+of genetic inheritance arising from recombination~\citep{wong2023general}, and recent
+breakthroughs have opened many new possibilities for their
+practical application~\citep{lewanski2023era}.
+Building on these breakthroughs, substantial progress has been made
+on statistical genetics questions.
+For example,  ARG-based methods
+can detect more ultra rare variants than conventional association testing
+methods~\citep{zhang2023};
+can better detect causal loci in quantitative-trait locus mapping~\citep{link2023tree};
+and can provide a sparse and efficient model of linkage disequilibirium
+in GWAS and downstream applications~\citep{nowbandegani2023extremely}.
 
-ARG is especially useful in population genetic simulations, and it would be
-possible to simulate genetic data with ancestral information by using ARG.
-Simulation is used in GWAS to examine how population structure and demographic
-histories influence polygenic risk score prediction
-\citep{martin2017,zaidi2020}, because simulation is the only way to obtain
-genetic data where the underlying demographic information is known. A succinct
-tree sequence (or tree sequence) is a data structure for ARGs, and it is one of
-the most popular genomic data structures in population genetic simulations
-\citep{baumdicker2022,haller2019}, (cite "A general and efficient, ..."
-article). Since it can efficiently store genetic information with far less data
-size than other methods, it is an appealing choice for simulating mutation and
-ancestry information \citep{kelleher2019}.
+Simulation is a critical component of GWAS method development, and
+generally consists of two steps: (1) generate a synthetic genetic
+variation dataset; and (2) simulate some quantitative traits
+based on this dataset.
+(The two steps may sometimes be combined
+in a single simulation, or we may use real data instead of simulations in
+step (2), but the basic principles are still the same.)
+The combined genetic variation and
+simulated quantitative traits then represent the ``truth'' against
+which association testing methods can be evaluated.
+The first step, of generating realistic, large-scale genetic variation
+datasets, is a well-studied problem with a mature and robust supporting
+software ecosystem. ARG-based methods~\citep{kelleher2016efficient,
+kelleher2018efficient,haller2018tree,baumdicker2022efficient,anderson2023}
+have been instrumental in making simulations of the scale and realism
+required to model modern GWAS cohorts~\cite[e.g.][]{martin2017,zaidi2020}.
+These simulation methods are all based on the ``succinct tree
+sequence'' ARG encoding~\citep{kelleher2019,ralph2020,wong2023general},
+using the open-source \texttt{tskit} library.
+
+
+
+% ARG is especially useful in population genetic simulations, and it would be
+% possible to simulate genetic data with ancestral information by using ARG.
+% Simulation is used in GWAS to examine how population structure and demographic
+% histories influence polygenic risk score prediction
+% \citep{martin2017,zaidi2020}, because simulation is the only way to obtain
+% genetic data where the underlying demographic information is known. A succinct
+% tree sequence (or tree sequence) is a data structure for ARGs, and it is one of
+% the most popular genomic data structures in population genetic simulations
+% \citep{baumdicker2022,haller2019}, (cite "A general and efficient, ..."
+% article). Since it can efficiently store genetic information with far less data
+% size than other methods, it is an appealing choice for simulating mutation and
+% ancestry information \citep{kelleher2019}.
 
 There are multiple useful software packages to simulate genotypic data with
 quantitative traits \citep{gaynor2021,haller2023}, and to simulate quantitative
@@ -352,7 +377,8 @@ Chromosome 9 is selected for both datasets.}\label{fig:time}
 We believe that in the coming years, simulation in tree sequence encoding will
 attract more users in need of conducting genetic simulations with complex
 population structure. Multiple studies highlight the advantages of using the
-ARG data structure in GWAS \citep{link2023,salehi2023,zhang2023}. ARG data
+ARG data structure in GWAS \citep{link2023tree,nowbandegani2023extremely,zhang2023}.
+ARG data
 structure is becoming increasingly useful in genetic studies, as it is possible
 to accurately infer biobank-scale genealogies from sequencing data
 \citep{zhang2023}, and simulate large sample whole-genome sequences with
