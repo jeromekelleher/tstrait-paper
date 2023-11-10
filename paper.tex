@@ -40,35 +40,22 @@
 
 %\usepackage{showframe}
 \usepackage{fontenc}
-\graphicspath{{Fig/}}
 
-\usepackage{minted}
 
 \usepackage{graphicx}
 
 % line numbers
-%\usepackage[mathlines, switch]{lineno}
-%\usepackage[right]{lineno}
-
-\theoremstyle{thmstyleone}%
-\newtheorem{theorem}{Theorem}%  meant for continuous numbers
-%%\newtheorem{theorem}{Theorem}[section]% meant for sectionwise numbers
-%% optional argument [theorem] produces theorem numbering sequence instead of independent numbers for Proposition
-\newtheorem{proposition}[theorem]{Proposition}%
-%%\newtheorem{proposition}{Proposition}% to get separate numbers for theorem and proposition etc.
-\theoremstyle{thmstyletwo}%
-\newtheorem{example}{Example}%
-\newtheorem{remark}{Remark}%
-\theoremstyle{thmstylethree}%
-\newtheorem{definition}{Definition}
+% \usepackage[mathlines, switch]{lineno}
+% \usepackage[right]{lineno}
 
 \begin{document}
 
-\journaltitle{Bioinformatics}
-\DOI{DOI HERE}
+% \journaltitle{Bioinformatics}
+\journaltitle{Preprint}
+% \DOI{DOI HERE}
 \copyrightyear{2023}
-\pubyear{2019}
-\access{Advance Access Publication Date: Day Month Year}
+% \pubyear{2019}
+% \access{Advance Access Publication Date: Day Month Year}
 \appnotes{Paper}
 
 \firstpage{1}
@@ -83,10 +70,16 @@
 
 \authormark{D.Tagami et al.}
 
-\address[1]{\orgdiv{Department of Statistics}, \orgname{University of Oxford}, \orgaddress{\street{24-29 St Giles'}, \postcode{Oxford OX1 3LB}, \country{United Kingdom}}}
-\address[2]{\orgdiv{Big Data Institute, Li Ka Shing Centre for Health Information and Discovery}, \orgname{University of Oxford}, \orgaddress{\street{Old Road Campus}, \postcode{Oxford OX3 7LF}, \country{United Kingdom}}}
+\address[1]{\orgdiv{Department of Statistics}, \orgname{University of Oxford},
+\orgaddress{\street{24-29 St Giles'}, \postcode{Oxford OX1 3LB},
+\country{United Kingdom}}}
+\address[2]{\orgdiv{Big Data Institute,
+Li Ka Shing Centre for Health Information and Discovery},
+\orgname{University of Oxford}, \orgaddress{\street{Old Road Campus},
+\postcode{Oxford OX3 7LF}, \country{United Kingdom}}}
 
-\corresp[$\ast$]{Corresponding author. \href{email:daiki.tagami@hertford.ox.ac.uk}{daiki.tagami@hertford.ox.ac.uk}}
+\corresp[$\ast$]{Corresponding author.
+\href{email:daiki.tagami@hertford.ox.ac.uk}{daiki.tagami@hertford.ox.ac.uk}}
 
 \received{Date}{0}{Year}
 \revised{Date}{0}{Year}
@@ -94,217 +87,267 @@
 
 \abstract{
 \textbf{Summary:}
-\texttt{tstrait} is a new open-source Python library that incorporates a wide
-range of state-of-the-art algorithms for simulating quantitative traits based
-on an ancestral recombination graph (ARG). ARG is an active field of research
-in population genetics and statistical genetics due to its promising aspects in
-genome-wide association study (GWAS), and this package serves as an essential
-infrastructure for utilizing ARG in GWAS simulations. In this work, we provide
-an overview of the simulation framework that is incorporated in
-\texttt{tstrait} and highlight some recent developments in ARG.\\
-\textbf{Availability and Implementation:} \texttt{tstrait} is available as an
-open-source Python package. The full documentation with examples and workflow
+Ancestral recombination graphs (ARGs) encode the ensemble of correlated
+genealogical trees arising from recombination in a compact and efficient
+structure, and are of fundamental importance in population and statistical
+genetics. Recent breakthroughs have made it possible to simulate and
+infer ARGs at the population scale, and there is now intense interest
+in applying ARG-based methods across a broad range of applications.
+Genome-wide association studies (GWAS) are one of the most imporant
+application areas, with ARG-based methods already providing substantial
+improvements over the state-of-the-art. The ability to efficiently
+simulate quantitative traits is critical to developing
+and evaluating new GWAS methods, but existing simulators do not scale
+to modern datasets and cannot be directly applied to ARGs.
+We present the \texttt{tstrait} package,
+an open-source Python library to simulate
+quantitative traits on ARGs, and show how this user-friendly software
+can be easily applied to vast, population-scale datasets.
+\\\textbf{Availability and Implementation:} \texttt{tstrait} is available
+for download on the Python Package Index.
+Full documentation with examples and workflow
 templates is available on \url{https://tskit.dev/tstrait/docs/}, and the
 development version is maintained on Github
 (\url{https://github.com/tskit-dev/tstrait}).\\ \textbf{Contact:}
 \href{daiki.tagami@hertford.ox.ac.uk}{daiki.tagami@hertford.ox.ac.uk}\\
 }
+
 %\abstract{Abstracts must be able to stand alone and so cannot contain %citations to
 %the paper's references, equations, etc. An abstract must consist of a single
 %paragraph and be concise. Because of online formatting, abstracts must appear
 %as plain as possible.}
-%\keywords{keyword1, Keyword2, Keyword3, Keyword4}
-
-% \boxedtext{
-% \begin{itemize}
-% \item Key boxed text here.
-% \item Key boxed text here.
-% \item Key boxed text here.
-% \end{itemize}}
+\keywords{Ancestral Recombination Graph, ARG, GWAS, quantitative traits,
+simulation}
 
 \maketitle
 
 \section{Introduction}
 
-Genome-wide association study (GWAS) tests genetic variants across the entire
-genome of individuals to identify genetic variants that are statistically
-associated with a specific trait \citep{uffelmann2021}. GWAS has successfully
-identified many loci that are associated with various human diseases and traits
-\citep{ishigaki2022,locke2015,mahajan2022,mathieson2023,yengo2022}, and GWAS
-results have actively been used in human trials and clinical practices
-\citep{visscher2017}. In spite of its advantages, population structure and
-demographic histories can heavily influence GWAS results \citep{uffelmann2021},
-so it would be necessary for researchers to implement these factors when
-conducting GWAS.
+Genome-wide association studies (GWAS)
+identify genetic variants that are statistically
+associated with a specific trait~\citep{uffelmann2021}.
+Many loci that are associated with various human diseases and
+traits have been identified~\citep{locke2015,ishigaki2022,
+mahajan2022,yengo2022,mathieson2023},
+and GWAS results are actively being incorporated into clinical
+practice~\citep{visscher2017}.
+Despite these successes and the ongoing collection of population-scale
+Biobank data~\citep{tanjo2021practical}, there are substantial open
+questions around GWAS methology.
+In particular, correctly accounting for population stratification
+remain challenging~\citep{uffelmann2021}.
 
-Ancestral recombination graphs (ARGs) have many promising aspects in GWAS.
-Recent studies have shown that genealogy-based association can detect more
-ultra rare variants than conventional methods \citep{zhang2023}, using an
-ARG-based approach in quantitative-trait locus mapping can better detect causal
-locus, especially in the presence of allelic heterogeneity \citep{link2023},
-and linkage disequilibirium can be efficiently modeled in GWAS by using a
-tree-based approach \citep{salehi2023}. These recent advances make ARG to be a
-suitable data format for conducting GWAS.
+Ancestral recombination graphs (ARGs) encode the interwoven paths
+of genetic inheritance arising from recombination~\citep{wong2023general}, and recent
+breakthroughs have opened many new possibilities for their
+practical application~\citep{lewanski2023era}.
+Building on these breakthroughs, substantial progress has been made
+on statistical genetics questions.
+For example,  ARG-based methods
+can detect more ultra rare variants than conventional association testing
+methods~\citep{zhang2023};
+can better detect causal loci in quantitative-trait locus mapping~\citep{link2023tree};
+and can provide a sparse and efficient model of linkage disequilibirium
+in GWAS and downstream applications~\citep{nowbandegani2023extremely}.
 
-ARG is especially useful in population genetic simulations, and it would be
-possible to simulate genetic data with ancestral information by using ARG.
-Simulation is used in GWAS to examine how population structure and demographic
-histories influence polygenic risk score prediction
-\citep{martin2017,zaidi2020}, because simulation is the only way to obtain
-genetic data where the underlying demographic information is known. A succinct
-tree sequence (or tree sequence) is a data structure for ARGs, and it is one of
-the most popular genomic data structures in population genetic simulations
-\citep{baumdicker2022,haller2019}, (cite "A general and efficient, ..."
-article). Since it can efficiently store genetic information with far less data
-size than other methods, it is an appealing choice for simulating mutation and
-ancestry information \citep{kelleher2019}.
+Simulation is a critical component of GWAS method development, and
+generally consists of two steps: (1) generate a synthetic genetic
+variation dataset; and (2) simulate some quantitative traits
+based on this dataset.
+(The two steps may sometimes be combined
+in a single simulation, or we may use real data instead of simulations in
+step (2), but the basic principles are still the same.)
+The combined genetic variation and
+simulated quantitative traits then represent the ``truth'' against
+which association testing methods can be evaluated.
+The first step, of generating realistic, large-scale genetic variation
+datasets, is a well-studied problem with a mature and robust supporting
+software ecosystem. ARG-based methods~\citep{kelleher2016efficient,
+kelleher2018efficient,haller2018tree,baumdicker2022efficient,anderson2023}
+have been instrumental in making simulations of the scale and realism
+required to model modern GWAS cohorts~\cite[e.g.][]{martin2017,zaidi2020}.
+These simulation methods are all based on the ``succinct tree
+sequence'' ARG encoding~\citep{kelleher2019,ralph2020,wong2023general},
+using the open-source \texttt{tskit} library.
 
-There are multiple useful software packages to simulate genotypic data with
-quantitative traits \citep{gaynor2021,haller2023}, and to simulate quantitative
-traits from observed genetic sequences \citep{fernandes2020,meyer2018}.
-However, there does not exist any simulators that can efficiently simulate
-quantitative traits of individuals directly from an ARG. While it would be
-possible to convert a tree sequence data to a different data format and use the
-available packages to simulate quantitative traits, data conversion can be
-computationally costly and it diminishes the computational advantages of using
-tree sequence data. It would be much more efficient to analyze genetic
-information by using the tree sequence data structure, and many population
-genetic statistics can be efficiently computed from the tree structure instead
-of obtaining the genotype matrix \citep{ralph2020}.
+An important property of the succinct tree sequence ARG encoding
+used by these population genetic simulators is that it allows us to
+store vast genetic variation datasets very compactly. Rather than
+storing the genetic sequence variation in its conventional matrix
+form, we can instead store the underlying genealogical history
+and mutations that ultimately \emph{result in} the observed
+variation~\citep{kelleher2019}.
+For example, the ultra-realistic simulations of 1.4 million
+French-Canadian individuals provided by \citet{anderson2023}
+requires around 550 GB of storage space in the
+standard gzip-compressed VCF format ($\sim$280TB uncompressed)
+for chromosome 9. The original simulation file representing
+precisely the same genetic variation data, \emph{plus} the
+complete simulated ARG, requires only 1.36GB of space
+in the compressed \texttt{tszip} format. Thus, in this
+case we achieve more than 400-fold compression,
+and this massive and otherwise highly unwieldy dataset
+becomes straightforward to work with (we discuss
+landmark dataset again in later sections).
+Another substantial benefit of storing simulated datasets
+in this ARG-based format is that many computations can
+be expressed efficiently in terms of the underlying
+ancestry~\citep{kelleher2016efficient,ralph2020}, without
+needing to decode the actual variation data.
 
-In this paper, we propose a new Python library \texttt{tstrait} to simulate
-quantitative traits of individuals in an arbitrary ARG. \texttt{tstrait} is
-built on top of \texttt{tskit} \citep{ralph2020}, which provides an efficient
-way for analyzing and processing ARGs encoded as tree sequence.
-\texttt{tstrait} utilizes the efficient data structure in the tree sequence
-data to simulate complex traits at a fast computational speed. It also provides
-an easily accessible interface by using \texttt{pandas} dataframe
-\citep{pandas} as an input and output of the simulation. Thus, \texttt{tstrait}
-can be easily integrated with other population genetic simulators as well.
+The first step of simulating data for evaluating GWAS methods,
+generating realistic genetic variation datasets of millions
+of individuals, is therefore at a high-level of sophistication
+and more than sufficient to support ongoing research.
+The second step, of generating the actual quantiative traits,
+is currently lagging far behind.
+Although there are multiple packages to simulate genotypic data
+concurrently with quantitative traits~\citep{gaynor2021,haller2023},
+and to simulate quantitative traits from a given set of genetic
+sequences~\citep[e.g.][]{meyer2018,fernandes2020}, none can
+handle the millions of samples now required.
+[TODO discuss bespoke stuff like Martin et al]
+In particular, there is no software package available to simulate quantitative
+traits directly from the efficient ARG representation used by
+modern population genetic simulators.
 
-In addition to its computational advantages of processing tree sequence data,
-\texttt{tstrait} offers other advantages: \emph{i)} it can simulate traits even
-if the sites have multiple mutations, unlike other simulation frameworks that
-assume infinite-sites model \citep{martin2017}, \emph{ii)} it can simulate
-traits from any ancestral individuals that existed in the demographic history,
-unlike other packages that can only simulate traits from the observed genetic
-information \citep{fernandes2020,meyer2018}, and \emph{iii)} it integrates with
-Python data science packages, such as \texttt{NumPy} \citep{numpy} and
-\texttt{pandas} \citep{pandas}. Due to these advantages, we hope that
-\texttt{tstrait} can provide easily accessible state-of-art quantitative trait
-simulation for researchers who are using population genetic simulation tools.
+In this paper we present \texttt{tstrait}, a new Python library that
+efficiently simulates quantitative traits on an arbitrary ARG.
+The package is build on top of
+\texttt{tskit}~\citep{ralph2020}, which provides a powerful
+framework for storing and processing ARGs.
+Using these efficient data structures, \texttt{tstrait} can
+quickly simulate quantitative traits for population-scale datasets,
+with a very low memory overhead. This approach also provides a
+richer model than existing methods,
+allowing us to, for example, simulate traits for
+ancestral individuals as well as contemporary samples.
+The \texttt{tstrait} library also integrates well with the wider
+PyData ecosystem of data-science tools,
+using
+\texttt{NumPy} arrays~\citep{numpy} and
+\texttt{pandas} dataframes~\citep{pandas}
+as input and output.
 
-\section{Phenotypic Model}
-
-Complex traits are traits that are influenced by a mixture of genetic and
-environmental factors. The additive model is a common assumption used in GWAS
-\citep{uffelmann2021}, and \texttt{tstrait} assumes that the traits are
-obtained from the following phenotypic model,
-\begin{align}\label{eq:additive-model}
-    y=X\beta+\epsilon,
-\end{align}
-where $\beta$ is the effect size, $X$ is the matrix that describes the number
+\section{Results}
+\subsection{Phenotypic Model}
+The additive model is a common assumption in GWAS
+\citep{uffelmann2021}, and we assume that a quantitative trait $y$
+is given by
+\[
+y=X\beta+\epsilon,
+\]
+where $\beta$ is the effect size, $X$ is a matrix describing the number
 of causal mutations in the individual, and $\epsilon$ is the environmental
-noise. The environmental noise is simulated from the following normal
-distribution,
-\begin{align}\label{eq:env}
-    \epsilon\sim \mathcal{N}\left(0,\frac{V_G(1-h^2)}{h^2}\right),
-\end{align}
-where $V_G$ is the additive genetic variance from the simulated effect sizes
-and $h^2$ is the narrow-sense heritability that is defined by the user.
+noise.
+[TODO more discussion here of what this means in an ARG. Be clear about
+causal mutations]
+% Environmental noise is normally distributed with mean zero
+% and a variance of $V_G(1-h^2)/{h^2}$,
+% % distribution,
+% % \begin{align}\label{eq:env}
+%     % \epsilon\sim \mathcal{N}\left(0,\frac{V_G(1-h^2)}{h^2}\right),
+% % \end{align}
+% where $V_G$ is the additive genetic variance from the simulated effect sizes,
+% and $h^2$ is the narrow-sense heritability provided as input by the user.
+% The \texttt{tstrait} API is modular, however, and other forms of environmental
+% noise can be easily generated by the user, if they wish.
 
-\section{Package Overview}
-
-\subsection{Effect Size}
-
-The first step of quantitative trait simulation in \texttt{tstrait} is to set
-the trait model distribution by using \emph{trait\_model} function, as in the
-following example:
-\begin{minted}{python}
+\subsection{Effect Sizes}
+The first step of quantitative trait simulation in \texttt{tstrait} is to
+define the trait model distribution, as follows:
+\begin{lstlisting}[language=Python]
 model = tstrait.trait_model(
-  distribution="normal", mean=0, var=1
-)
-\end{minted}
-The \texttt{tstrait} package supports effect size simulation from five
-univariate distributions and one multivariate distribution, which are taken
-from commonly used statistical distributions to simulate effect sizes
-\citep{gaynor2021,haller2023}. The multivariate normal distribution trait model
-is used to simulate multiple traits, assuming that they are pleiotropic. The
-trait model is used as an input of \emph{sim\_trait} function to simulate
-effect sizes:
-\begin{minted}{python}
+    distribution='normal', mean=0, var=1)
+\end{lstlisting}
+\texttt{Tstrait} currently supports effect size simulation from five
+commonly used univariate distributions~\citep{gaynor2021,haller2023}
+and one multivariate distribution.
+The multivariate normal distribution is used to simulate multiple
+pleiotropic traits.
+The trait model is used as an input of \texttt{sim\_trait} function to simulate
+effect sizes, along with the input ARG and number of causal sites:
+\begin{lstlisting}[language=Python]
 trait_df = tstrait.sim_trait(
-   ts, num_causal=5, model=model
-)
-\end{minted}
-\emph{ts} is the tree sequence input, and the user can set the number of causal
-sites that is affecting the trait. The output will be a \texttt{pandas}
-dataframe \citep{pandas} that describes the simulated effect sizes.
+    arg, num_causal=5, model=model)
+\end{lstlisting}
+The output, \texttt{trait\_df} is a \texttt{pandas} dataframe
+describing the simulated effect sizes and corresponding
+causal site IDs.
 
 \subsection{Genetic Value}
-
-Genetic value is simulated in \texttt{tstrait} by using the effect size dataframe:
-\begin{minted}{python}
+Given a set of causal sites and effect sizes defined in a dataframe
+and the input ARG, the \emph{genetic values} [TODO DEFINE ME]
+are simulated as follows:
+\begin{lstlisting}[language=Python]
 genetic_result = tstrait.sim_genetic(
-   ts, trait_df, alpha=0
-)
-\end{minted}
-\texttt{tstrait} offers flexibility in genetic value simulation, as users can
-define their own effect size dataframe, in addition to using the simulated
-output of \emph{sim\_trait} function. This allows users to use the output from
-other simulators to simulate traits in \texttt{tstrait}.
-
-This is the most computationally intensive part of the simulation algorithm, as
-it would be necessary for the algorithm to count the number of causal mutations
-in each individual inside the dataset. The \texttt{sim\_genetic} function uses
-the tree-traversal algorithm to analyze the tree sequence data
-\citep{ralph2020}, and uses the Python package \texttt{Numba} \citep{numba} to
-speed up the code. This enables \texttt{tstrait} to be an efficient
-quantitative trait simulator of a tree sequence data.
-
-\texttt{tstrait} also supports effect size simulation from the frequency
+   arg, trait_df, alpha=0)
+\end{lstlisting}
+The $\alpha$ parameter here is used to
+supports effect size simulation from a frequency
 dependent model, where the simulated effect sizes from the causal mutation
-having allele frequency $p$ will be multiplied by $[2p(1-p)]^\alpha$. The
-$\alpha$ parameter is a user-defined parameter, which is used to control the
-degree of frequency dependence on simulated effect sizes. It has been suggested
-that effect sizes from rarer variants can have increased magnitude from
-negative selection, and the model above with a negative $\alpha$ value is used
-to conduct realistic simulations \citep{speed2017}.
+having allele frequency $p$ are multiplied by $\left(2p(1-p)\right)^\alpha$.
+An $\alpha$ value of zero as in this example means there is
+no frequency dependence. A negative value of $\alpha$
+can be used to model the increased effect sizes on rare variants
+resulting from negative selection~\citep{speed2017}.
+[TODO is this correct? What's the interpretation of positive alpha?]
+
+A major benefit of this modular approach to simulating effect sizes
+and genetic values separately is the flexibility this offers
+users. Because the causal sites and effect sizes are specified in a
+simple tabular format, users can easily develop their own approach
+to simulating these values. Alternatively, other simulators
+such as SLiM~\citep{haller2023} that generate effect sizes and
+causal mutations during the progress of a forwards-time simulation
+(to model the effect of selection, for example) could output these
+values to a CSV or similar file. The modularity here and simple
+input data format is specifically intended to facilitate such
+interoperability between simulators.
+
+Generating the genetic values for a trait is by far the
+most computationally intensive part of the simulation,
+as we are essentially counting the number
+of causal mutations in each individual. This is done by a
+straightforward tree traversal algorithm in \texttt{tstrait},
+accelerated using the \texttt{numba} JIT compiler for Python.
+As we see in later sections, this yields very good performance
+at the largest scale, without requiring any additional code in
+compiled languages such as C.
 
 \subsection{Phenotype}
-
-Phenotype is simulated from \texttt{tstrait} by using \emph{sim\_env}:
-\begin{minted}{python}
+The final phenotype simulation is done in \texttt{tstrait}
+by imposing some environmental noise.
+We assume environmental noise is normally distributed with mean zero
+and a variance of
+\[
+V_G(1-h^2)/{h^2}
+\]
+where $V_G$ is the additive genetic variance from the simulated effect sizes,
+and $h^2$ is the narrow-sense heritability parameter provided as input.
+Thus, the \texttt{sim\_env} function takes the dataframe of genetic values
+and narrow-sense heritability as parameters:
+\begin{lstlisting}[language=Python]
 phenotype_df = tstrait.sim_env(
-   genetic_result.genetic, h2=0.3, random_seed=1
-)
-\end{minted}
-The parameters are used to simulate environmental noise from the distribution (\ref{eq:env}).
+    genetic_result.genetic, h2=0.3)
+\end{lstlisting}
+This simulation returns a dataframe
+describing the simulated genetic value, environmental noise and
+resulting phenotype for each individual at each causal site.
 
-After completing the simulation, \texttt{tstrait} returns two dataframes to
-describe the simulated genetic effect sizes and phenotypes. The resulting
-dataframes include information regarding the site IDs, individual IDs and
-allele frequencies, so it would be possible to regenerate the simulated results
-whenever required.
+As discussed above, there are significant advantages to providing a modular
+API. For convenience, we also provide a single
+\texttt{sim\_phenotype} function that combines the process of simulating
+effect sizes, generating genetic values and imposing environmental noise.
 
-Alternatively, all the above steps of the simulation can be conducted by using
-\emph{sim\_phenotype}:
-\begin{minted}{python}
-sim_result = tstrait.sim_phenotype(
-  ts=ts, num_causal=100, model=model, h2=0.3
-)
-\end{minted}
-The user only needs to input the number of causal sites, trait model and the
-narrow-sense heritability to simulate quantitative traits. By using this
-function, the user does not need to modify the details of the quantitative
-trait simulation.
-
-\section{Computational Time}
-
-\texttt{tstrait} offers a very efficient way of simulating quantitative traits
-based on an ARG. Figure \ref{fig:time} (A) shows how the simulation time scales
-with the number of individuals on simulated human genomes in \texttt{stdpopsim}
-\citep{adrion2020}. The only published code to simulate quantitative traits
+\subsection{Performance}
+\texttt{Tstrait} is very efficient, and can be applied to datasets at the
+largest scales.
+Fig~\ref{fig:time}A shows how the simulation time scales
+with the number of individuals using simple simulations
+of humans using \texttt{stdpopsim}~\citep{adrion2020}.
+[HERE]
+The only published code to simulate quantitative traits
 directly from ARGs is in \cite{martin2017}, which we compared with. Including
 other tools that require the entire genome matrix is not practical, as the
 simulation time will be dominated by processing the VCF file and it would not
@@ -325,7 +368,9 @@ also used to measure the computational performance.
 
 \begin{figure}[!t]%
 \centering
-\includegraphics[width=213pt]{figure.pdf}
+% FIXME get the sizes right here and in the notebook where we're generating
+% the figure so we don't have to scale here.
+\includegraphics[width=213pt]{figures/time-scaling.pdf}
 \caption{\textbf{Time taken to simulate quantitative traits.} Each point
 represents the mean time for 10 independent runs under different random seeds.
 The times reported are the total CPU time required to simulate quantitative
@@ -351,7 +396,8 @@ Chromosome 9 is selected for both datasets.}\label{fig:time}
 We believe that in the coming years, simulation in tree sequence encoding will
 attract more users in need of conducting genetic simulations with complex
 population structure. Multiple studies highlight the advantages of using the
-ARG data structure in GWAS \citep{link2023,salehi2023,zhang2023}. ARG data
+ARG data structure in GWAS \citep{link2023tree,nowbandegani2023extremely,zhang2023}.
+ARG data
 structure is becoming increasingly useful in genetic studies, as it is possible
 to accurately infer biobank-scale genealogies from sequencing data
 \citep{zhang2023}, and simulate large sample whole-genome sequences with

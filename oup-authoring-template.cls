@@ -822,27 +822,27 @@
             }}%
       \def\@evenfoot{{
             \hbox to \textwidth{\parbox{\textwidth}{\hspace*{1pt}\vspace*{3pt}\newline\rule{332pt}{.5pt}\vspace*{1pt}\newline\sffamilyfontcn\thepage\hfill
-              \fontsize{7}{9}\fontshape{n}\selectfont\raggedright \copyright\space The Author \@copyrightyear. Published by Oxford University Press. All rights reserved. For permissions, please e-mail: journals.permissions@oup.com}%
+              \fontsize{7}{9}\fontshape{n}\selectfont\raggedright \copyright\space The Author \@copyrightyear. }%
             }}}%
     \else
     \if@medium
       \def\@oddfoot{{
             \hbox to
 	    \textwidth{\parbox{428pt}{\hspace*{1pt}\vspace*{3pt}\newline\rule{428pt}{.5pt}\vspace*{1pt}\newline\sffamilyfontcn%
-            \fontsize{7}{9}\fontshape{n}\selectfont \copyright\space The Author \@copyrightyear. Published by Oxford University Press. All rights reserved. For permissions, please e-mail: journals.permissions@oup.com%
+            \fontsize{7}{9}\fontshape{n}\selectfont \copyright\space The Author \@copyrightyear. %
               \hfill\small\sffamilyfontbold\thepage}}%
             }}%
       \def\@evenfoot{{
             \hbox to
 	    \textwidth{\parbox{428pt}{\hspace*{1pt}\vspace*{3pt}\newline\rule{428pt}{.5pt}\vspace*{1pt}\newline%
 \sffamilyfontcn\thepage\hfill
-              \fontsize{7}{9}\fontshape{n}\selectfont \copyright\space The Author \@copyrightyear. Published by Oxford University Press. All rights reserved. For permissions, please e-mail: journals.permissions@oup.com}%
+              \fontsize{7}{9}\fontshape{n}\selectfont \copyright\space The Author \@copyrightyear. }%
             }}}%
 \else%
       \def\@oddfoot{{
             \hbox to
 	    \textwidth{\parbox{\textwidth}{\hspace*{1pt}\vspace*{3pt}\newline\rule{506pt}{.5pt}\vspace*{1pt}\newline\sffamilyfontcn%
-            \fontsize{7}{9}\fontshape{n}\selectfont \copyright\space The Author \@copyrightyear. Published by Oxford University Press. All rights reserved. For permissions, please e-mail: journals.permissions@oup.com%
+            \fontsize{7}{9}\fontshape{n}\selectfont \copyright\space The Author \@copyrightyear. %
               \hfill\small\sffamilyfontbold\thepage}}%
             }}%
       \def\@evenfoot{{
