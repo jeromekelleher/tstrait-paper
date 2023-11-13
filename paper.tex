@@ -199,7 +199,7 @@ needing to decode the actual variation data.
 The first step of simulating data for evaluating GWAS methods,
 generating realistic genetic variation datasets of millions
 of individuals, is therefore at a high-level of sophistication
-and more than sufficient to support ongoing research.
+and seems sufficient to support ongoing research.
 The second step, of generating the actual quantiative traits,
 is currently lagging far behind.
 Although there are multiple packages to simulate genotypic data
@@ -207,8 +207,21 @@ concurrently with quantitative traits~\citep{gaynor2021,haller2023},
 and to simulate quantitative traits from a given set of genetic
 sequences~\citep[e.g.][]{meyer2018,fernandes2020}, none can
 handle the millions of individuals now required.
-[TODO discuss bespoke stuff like Martin et al]
-In particular, there is no software package available to simulate quantitative
+% TODO this needs another pass. We do need to address the Martin et
+% al thing up front though, I think.
+\citet{martin2017} simulated quantitative traits for
+600,000 humans as part of their analysis of the portability
+of polygenic risk scores across populations. This was
+done by using custom scripts to generate traits for these
+large ARGs output by the \texttt{msprime}
+simulator~\cite{kelleher2016efficient}.
+While the code provided by Martin et al.\ was sufficient
+for their analysis, it is tightly coupled to the details of their study
+and not documented or designed to be reused.
+Simulation code can be subtle and difficult to
+debug~\citep{ragsdale2020lessons}, and therefore there
+is a critical need for a well-documented and
+thoroughly tested means of simulating quantitative
 traits directly from the efficient ARG representation used by
 modern population genetic simulators.
 
