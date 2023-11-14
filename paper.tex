@@ -131,23 +131,24 @@ traits have been identified~\citep{locke2015,ishigaki2022,
 mahajan2022,yengo2022,mathieson2023},
 and GWAS results are actively being incorporated into clinical
 practice~\citep{visscher2017}.
-Despite these successes and the ongoing collection of population-scale
-Biobank data~\citep{tanjo2021practical}, there are substantial open
-questions around GWAS methology.
-% TODO rephrase
-In particular, correctly accounting for population stratification
-remains challenging~\citep{uffelmann2021}.
+This success has led to the collection of many population-scale Biobank
+datasets~\citep{tanjo2021practical}.
+This dense sampling and resulting vast volumes of data, however,
+are presenting significant challenges to GWAS methology.
+For example, how to correctly account for population stratification
+remains an open question~\citep{uffelmann2021}.
 
 Ancestral recombination graphs (ARGs) encode the interwoven paths
 of genetic inheritance arising from recombination~\citep{wong2023general}, and recent
-breakthroughs have opened many new possibilities for their
+breakthroughs in inference have opened many new possibilities for their
 practical application~\citep{lewanski2023era}.
-Building on these breakthroughs, substantial progress has been made
-on statistical genetics questions.
+Building on these recent developments, substantial progress has been made
+on statistical genetics applications.
 For example,  ARG-based methods
 can detect more ultra rare variants than conventional association testing
 methods~\citep{zhang2023};
-have better power to detect causal loci in quantitative-trait locus mapping~\citep{link2023tree};
+have better power to detect causal loci in
+quantitative-trait locus mapping~\citep{link2023tree};
 and can provide a sparse and efficient model of linkage disequilibirium
 in GWAS and downstream applications~\citep{nowbandegani2023extremely}.
 
@@ -164,8 +165,9 @@ which association testing methods can be evaluated.
 The first step, of generating realistic, large-scale genetic variation
 datasets, is a well-studied problem with a mature and robust supporting
 software ecosystem. ARG-based methods~\citep{kelleher2016efficient,
-kelleher2018efficient,haller2018tree,baumdicker2022efficient,anderson2023}
-have been instrumental in making simulations of the scale and realism
+kelleher2018efficient,haller2018tree,adrion2020,baumdicker2022efficient,anderson2023}
+have been instrumental in making population genetic simulations
+of the scale and realism
 required to model modern GWAS cohorts~\cite[e.g.][]{martin2017,zaidi2020}.
 These simulation methods are all based on the ``succinct tree
 sequence'' ARG encoding~\citep{kelleher2019,ralph2020,wong2023general},
@@ -173,22 +175,25 @@ using the open-source \texttt{tskit} library.
 
 An important property of the succinct tree sequence ARG encoding
 used by these population genetic simulators is that it allows us to
-store vast genetic variation datasets very compactly. Rather than
-storing the genetic sequence variation in its conventional matrix
-form, we can instead store the underlying genealogical history
-and mutations that ultimately \emph{result in} the observed
+store enormous genetic variation datasets compactly. Instead of
+storing the genetic sequence variation in the conventional
+matrix-based form~\citep[e.g.\ VCF,][]{danecek2011},
+we can store the underlying genealogical history
+and mutations that ultimately \emph{result} in the observed
 variation~\citep{kelleher2019}.
-For example, the ultra-realistic simulations of 1.4 million
-French-Canadian individuals provided by \citet{anderson2023}
-requires around 550 GB of storage space in the
-standard gzip-compressed VCF format ($\sim$280TB uncompressed)
-for chromosome 9. The original simulation file representing
-precisely the same genetic variation data, \emph{plus} the
+For example, a highly realistic simulation
+of chromosome 9 for 1.4 million
+French-Canadian individuals~\citep{anderson2023}
+requires around 550GB of storage space in
+gzip-compressed VCF ($\sim$280TB uncompressed).
+The original simulation file representing
+precisely the same genetic variation data, plus the
 complete simulated ARG, requires only 1.36GB of space
-in the compressed \texttt{tszip} format. Thus, in this
-case we achieve more than 400-fold compression,
-and this massive and otherwise highly unwieldy dataset
-becomes straightforward to work with (we discuss
+in compressed \texttt{tszip} format. Thus,
+by encoding in terms of the underlying ARG,
+in this case we achieve more than 400-fold compression,
+and this highly unwieldy dataset
+becomes straightforward to work with (we discuss this
 landmark dataset again in later sections).
 Another substantial benefit of storing simulated datasets
 in this ARG-based format is that many computations can
@@ -196,41 +201,34 @@ be expressed efficiently in terms of the underlying
 ancestry~\citep{kelleher2016efficient,ralph2020}, without
 needing to decode the actual variation data.
 
-The first step of simulating data for evaluating GWAS methods,
-generating realistic genetic variation datasets of millions
-of individuals, is therefore at a high-level of sophistication
-and seems sufficient to support ongoing research.
-The second step, of generating the actual quantiative traits,
-is currently lagging far behind.
-Although there are multiple packages to simulate genotypic data
-concurrently with quantitative traits~\citep{gaynor2021,haller2023},
-and to simulate quantitative traits from a given set of genetic
-sequences~\citep[e.g.][]{meyer2018,fernandes2020}, none can
-handle the millions of individuals now required.
+There are therefore sophisticated methods available for simulating
+ARGs at the population scale, but there is currently no
+easy way to generate quantiative traits based on such an ARG.
+Existing methods to simulate quantitative traits from a given set of
+genetic sequences in standard formats~\citep[e.g.][]{meyer2018,fernandes2020}
+are overwhelmed by the scale of the data. For example,
+just parsing the 280TB of VCF for the French-Canadian
+dataset mentioned above would take many days of CPU time,
+making quantitative trait simulation by this approach unfeasible.
 % TODO this needs another pass. We do need to address the Martin et
 % al thing up front though, I think.
-\citet{martin2017} simulated quantitative traits for
-600,000 humans as part of their analysis of the portability
-of polygenic risk scores across populations. This was
-done by using custom scripts to generate traits for these
-large ARGs output by the \texttt{msprime}
-simulator~\cite{kelleher2016efficient}.
-While the code provided by Martin et al.\ was sufficient
-for their analysis, it is tightly coupled to the details of their study
-and not documented or designed to be reused.
+In their analysis of the portability of polygenic risk
+scores across populations, \citet{martin2017}
+used efficient \texttt{tskit} APIs to simulate quantitative
+traits for 600,000 humans directly from a simulated ARG.
+While the code provided by Martin et al.\ works at this
+very large scale, it is tightly coupled to the details of their study
+and not designed to be reused.
 Simulation code can be subtle and difficult to
-debug~\citep{ragsdale2020lessons}, and therefore there
-is a critical need for a well-documented and
+debug~\citep{ragsdale2020lessons}, and there
+is therefore a critical need for a well-documented and
 thoroughly tested means of simulating quantitative
-traits directly from the efficient ARG representation used by
-modern population genetic simulators.
+traits directly from an ARG.
 
 In this paper we present \texttt{tstrait}, a new Python library that
-efficiently simulates quantitative traits on an arbitrary ARG.
-The package is build on top of
-\texttt{tskit}~\citep{ralph2020}, which provides a powerful
-framework for storing and processing ARGs.
-Using these efficient data structures, \texttt{tstrait} can
+efficiently simulates quantitative traits on an arbitrary ARG
+in \texttt{tskit}~\citep{ralph2020} format.
+\texttt{Tstrait} can
 quickly simulate quantitative traits for population-scale datasets,
 with a very low memory overhead. This approach also provides a
 richer model than existing methods,
@@ -367,7 +365,7 @@ other tools that require the entire genome matrix is not practical, as the
 simulation time will be dominated by processing the VCF file and it would not
 be practically to analyze a large sample VCF file on a laptop PC. For example,
 the Chromosome 9 French Canadian dataset takes approximately 280 terabytes in
-the VCF format, but it is only 1.357 Gb in the \texttt{tskit} compressed
+VCF, but it is only 1.357 Gb in the \texttt{tskit} compressed
 tree-sequence format and it only takes a few minutes to load and process by
 using the tree sequence data structure.
 
