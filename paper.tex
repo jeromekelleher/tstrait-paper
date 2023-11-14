@@ -355,9 +355,31 @@ effect sizes, generating genetic values and imposing environmental noise.
 \subsection{Performance}
 \texttt{Tstrait} is very efficient, and can be applied to datasets at the
 largest scales.
-Fig~\ref{fig:time}A shows how the simulation time scales
-with the number of individuals using simple simulations
-of humans using \texttt{stdpopsim}~\citep{adrion2020}.
+Fig~\ref{fig:time}A shows how the trait simulation time scales
+with number of individuals, for sequences of length 50, 100 and 200Mb.
+For each sample size and sequence length,
+we first simulate an ARG under a simple coalescent model with
+human-like parameters using~\texttt{stdpopsim}~\citep{adrion2020}.
+We then run a quantitative trait simulation
+with 1000 causal sites on this ARG using \texttt{tstrait},
+and report the mean CPU time over 10 independent replicates.
+For comparison, we also report the CPU time required by a
+modified version of the code used by \citet{martin2017} for a
+subset of these simulated ARGs.
+A comparison with existing methods that require reading
+in genetic sequences in formats such as
+VCF~\citep[e.g.][]{meyer2018,fernandes2020} is not feasible,
+as the time required to read the data at this scale would be
+far more than the minutes required here to perform
+the simulations.
+We do not report the memory usage here, but note that these
+simulations for up to 5 million humans were run without difficult
+on a laptop.
+
+
+For each replicate of the simulation, \texttt{tstrait} is
+used to simulate one quantitative trait with 1000 causal sites. (B)
+
 [HERE]
 The only published code to simulate quantitative traits
 directly from ARGs is in \cite{martin2017}, which we compared with. Including
