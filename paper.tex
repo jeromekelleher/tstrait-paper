@@ -250,7 +250,7 @@ is given by
 y=X\beta+\epsilon,
 \]
 where $\beta$ is the effect size, $X$ is a matrix describing the number
-of causal mutations in the individual, and $\epsilon$ is the environmental
+of causal alleles in the individual, and $\epsilon$ is the environmental
 noise.
 [TODO more discussion here of what this means in an ARG. Be clear about
 causal mutations]
@@ -355,9 +355,24 @@ effect sizes, generating genetic values and imposing environmental noise.
 \subsection{Performance}
 \texttt{Tstrait} is very efficient, and can be applied to datasets at the
 largest scales.
-Fig~\ref{fig:time}A shows how the simulation time scales
-with the number of individuals using simple simulations
-of humans using \texttt{stdpopsim}~\citep{adrion2020}.
+Supplementary Fig~\ref{fig:time}A shows how trait simulation time scales
+with number of individuals, for sequences of length 50, 100 and 200Mb.
+For each sample size and sequence length,
+we first simulate an ARG under a simple coalescent model with
+human-like parameters using~\texttt{stdpopsim}~\citep{adrion2020}.
+We then run a quantitative trait simulation
+with 1000 causal sites on this ARG using \texttt{tstrait},
+and report the mean CPU time over 10 independent replicates.
+For comparison, we also report the CPU time required by a
+modified version of the code used by \citet{martin2017} for a
+subset of these simulated ARGs.
+A comparison with existing methods that require reading
+in genetic sequences in formats such as
+VCF~\citep[e.g.][]{meyer2018,fernandes2020} is not feasible,
+as the VCFs involved are very large, and these tools assume that
+the entire dataset fits in RAM.
+[DISCUSS RAM USAGE]
+
 [HERE]
 The only published code to simulate quantitative traits
 directly from ARGs is in \cite{martin2017}, which we compared with. Including
@@ -378,30 +393,6 @@ practical to simulate quantitative traits from this largest ever simulated
 dataset. The inferred ARG from the 1000 Genomes project \citep{kelleher2019} is
 also used to measure the computational performance.
 
-\begin{figure}[!t]%
-\centering
-% FIXME get the sizes right here and in the notebook where we're generating
-% the figure so we don't have to scale here.
-\includegraphics[width=213pt]{figures/time-scaling.pdf}
-\caption{\textbf{Time taken to simulate quantitative traits.} Each point
-represents the mean time for 10 independent runs under different random seeds.
-The times reported are the total CPU time required to simulate quantitative
-traits on an Intel(R) Core(TM) i9-11900H CPU and 16 GB of RAM. The trait model
-is a normal distribution with $\mu=0$, $\sigma^2=1$, $h^2=0.3$, and
-$\alpha=-1$. (A) Computational time with increasing number of individuals. The
-whole genome dataset from \emph{Homo sapiens} with various number of
-individuals and chromosome length are simulated by using \texttt{stdpopsim}
-\citep{adrion2020}. For each replicate of the simulation, \texttt{tstrait} is
-used to simulate one quantitative trait with 1000 causal sites. (B)
-Computational time with increasing number of causal sites on two large
-realistic ARGs. \texttt{tstrait} is used to simulate quantitative traits from
-the simulated French Canadian dataset \citep{anderson2023} and the inferred
-tree sequence dataset of the 1000 Genomes Project \citep{kelleher2019} with
-varying number of causal sites. The French Canadian dataset is downloaded from
-\url{https://zenodo.org/record/6839683}, and the inferred ARG from the 1000
-Genomes Project is downloaded from \url{https://zenodo.org/record/3051855}.
-Chromosome 9 is selected for both datasets.}\label{fig:time}
-\end{figure}
 
 \section{Conclusion}
 
@@ -429,15 +420,46 @@ helpful discussions and feedback. We thank Ben Jeffery for his help with the
 Python package development.
 
 \section{Funding}
-
-D.T. is supported by the Oxford Kobe Scholarship from the University of Oxford
+DT is supported by the Oxford Kobe Scholarship from the University of Oxford
 and the Euretta J. Kellett Fellowship from Columbia University.
-
-This work was supported by ...
+JK acknowledges support from the Robertson Foundation,
+NIH (research grants HG011395 and HG012473) and
+EPSRC (research grant EP/X024881/1).
 
 
 %USE THE BELOW OPTIONS IN CASE YOU NEED AUTHOR YEAR FORMAT.
 \bibliographystyle{abbrvnat}
 \bibliography{paper}
+
+\newpage
+\renewcommand\thefigure{S\arabic{figure}}
+\setcounter{figure}{0}
+\renewcommand\thetable{S\arabic{table}}
+\setcounter{table}{0}
+\section{Supplementary Figures}
+
+\begin{figure*}[t]%
+\centering
+% FIXME get the sizes right here and in the notebook where we're generating
+% the figure so we don't have to scale here.
+\includegraphics[width=213pt]{figures/time-scaling.pdf}
+\caption{\textbf{Time taken to simulate quantitative traits.} Each point
+represents the mean time for 10 independent runs under different random seeds.
+The times reported are the total CPU time required to simulate quantitative
+traits on an Intel(R) Core(TM) i9-11900H CPU and 16 GB of RAM. The trait model
+is a normal distribution with $\mu=0$, $\sigma^2=1$, $h^2=0.3$, and
+$\alpha=-1$. (A) CPU time with increasing number of individuals
+based on ARGs simulated using \texttt{stdpopsim} with the [MODEL ID]
+demographic mode. For each replicate we simulate
+one quantitative trait with 1000 causal sites.
+(B) CPU time with increasing number of causal sites on two large ARGs.
+\texttt{tstrait} is used to simulate quantitative traits from
+the simulated French Canadian dataset \citep{anderson2023} and the inferred
+tree sequence dataset of the 1000 Genomes Project \citep{kelleher2019} with
+varying number of causal sites. The French Canadian dataset is downloaded from
+\url{https://zenodo.org/record/6839683}, and the inferred ARG from the 1000
+Genomes Project is downloaded from \url{https://zenodo.org/record/3051855}.
+Chromosome 9 is selected for both datasets.}\label{fig:time}
+\end{figure*}
 
 \end{document}
