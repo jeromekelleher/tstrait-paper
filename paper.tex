@@ -289,10 +289,16 @@ causal site IDs.
 
 \begin{figure}[t]%
 \centering
-% FIXME get the sizes right here and in the notebook where we're generating
-% the figure so we don't have to scale here.
 \includegraphics[width=240pt]{figures/tree-illustration.pdf}
-\caption{Caption will be added later}\label{fig:time}
+\caption{Example simulation of a phenotype at a site with ancestral state A and
+two mutations. In this diploid example each of the three individuals
+is assocated with two nodes (i.e., the individual with ID 0 corresponds
+to nodes \textsf{a} and \textsf{b}). Internal nodes in the tree are associated
+with the null individual, $-1$. Here, the trait's causal allele is T
+and an effect size $\beta=0.05$. Each node in the tree has an associated
+genetic value, and the overall genetic value for an individual is the
+sum of their corresponding node values.
+\label{fig:tree-illustration}}
 \end{figure}
 
 \subsection{Genetic Value}
@@ -439,7 +445,8 @@ EPSRC (research grant EP/X024881/1).
 \bibliographystyle{abbrvnat}
 \bibliography{paper}
 
-\newpage
+\clearpage
+
 \renewcommand\thefigure{S\arabic{figure}}
 \setcounter{figure}{0}
 \renewcommand\thetable{S\arabic{table}}
