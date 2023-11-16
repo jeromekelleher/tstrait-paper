@@ -387,7 +387,7 @@ interoperability between simulators.
 % \texttt{sim\_phenotype} function that combines the process of simulating
 % effect sizes, generating genetic values and imposing environmental noise.
 
-\subsection{Implementation}
+\subsection{Implementation and validation}
 \texttt{Tstrait} is written entirely in Python. Many numerical operations are
 peformed using standard array-oriented approaches and therefore
 highly efficient~\citep{numpy}. Generating the genetic values for a given
@@ -395,6 +395,11 @@ trait is computationally intensive. This is done by a
 straightforward tree traversal algorithm, which is
 accelerated using the \texttt{numba} JIT compiler for Python yielding
 excellent performance.
+
+The \texttt{tstrait} codebase includes an extensive suite of unit tests,
+which are automatically run as part of the development process. The
+output of \texttt{tstrait} has been statistically validated against
+[FILL ME IN].
 
 \subsection{Performance}
 \texttt{Tstrait} is very efficient, and can be applied to datasets at the
@@ -415,18 +420,8 @@ in genetic sequences in formats such as
 VCF~\citep[e.g.][]{meyer2018,fernandes2020} is not feasible,
 as the VCFs involved are very large, and these tools assume that
 the entire dataset fits in RAM.
-[DISCUSS RAM USAGE]
-
-[HERE]
-The only published code to simulate quantitative traits
-directly from ARGs is in \cite{martin2017}, which we compared with. Including
-other tools that require the entire genome matrix is not practical, as the
-simulation time will be dominated by processing the VCF file and it would not
-be practically to analyze a large sample VCF file on a laptop PC. For example,
-the Chromosome 9 French Canadian dataset takes approximately 280 terabytes in
-VCF, but it is only 1.357 Gb in the \texttt{tskit} compressed
-tree-sequence format and it only takes a few minutes to load and process by
-using the tree sequence data structure.
+Supplementary Fig~\ref{fig:time}B shows that RAM usage is very
+modest for all these simulations.
 
 Figure \ref{fig:time} (B) shows simulation time of \texttt{tstrait} with more
 realistic data. For example, \texttt{tstrait} is used to simulate traits from
@@ -437,9 +432,7 @@ practical to simulate quantitative traits from this largest ever simulated
 dataset. The inferred ARG from the 1000 Genomes project \citep{kelleher2019} is
 also used to measure the computational performance.
 
-
 \section{Conclusion}
-
 We believe that in the coming years, simulation in tree sequence encoding will
 attract more users in need of conducting genetic simulations with complex
 population structure. Multiple studies highlight the advantages of using the
@@ -457,11 +450,8 @@ essential piece of infrastructure that lets people explore these possibilities.
 No competing interest is declared.
 
 \section{Acknowledgments}
-
-We greatly acknowledge helpful discussions about quantitative trait simulation
-with Gregor Gorjanc. We thank Ben Haller and people in the tskit community for
-helpful discussions and feedback. We thank Ben Jeffery for his help with the
-Python package development.
+We are grateful to Gregor Gorjanc, Ben Haller, Ben Jeffery and
+others in the tskit community for helpful discussions and feedback.
 
 \section{Funding}
 DT is supported by the Oxford Kobe Scholarship from the University of Oxford
