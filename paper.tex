@@ -132,11 +132,10 @@ mahajan2022,yengo2022,mathieson2023},
 and GWAS results are actively being incorporated into clinical
 practice~\citep{visscher2017}.
 This success has led to the collection of many population-scale Biobank
-datasets~\citep{tanjo2021practical}.
-This dense sampling and resulting vast volumes of data, however,
-are presenting significant challenges to GWAS methology.
-For example, how to correctly account for population stratification
-remains an open question~\citep{uffelmann2021}.
+datasets~\citep{tanjo2021practical}, 
+but the sampling and resulting vast volumes of data
+are presenting significant challenges to GWAS 
+methology~\citep{uffelmann2021}.
 
 Ancestral recombination graphs (ARGs) encode the interwoven paths
 of genetic inheritance arising from
@@ -159,7 +158,7 @@ in GWAS and downstream applications~\citep{nowbandegani2023extremely}.
 
 Simulation is a critical component of GWAS method development, and
 generally consists of two steps: (1) generate a synthetic genetic
-variation dataset; and (2) simulate some quantitative traits
+variation dataset; and (2) simulate quantitative traits
 based on this dataset.
 (The two steps may sometimes be combined
 in a single simulation, or we may use real data instead of simulations in
@@ -175,8 +174,8 @@ have been instrumental in making population genetic simulations
 of the scale and realism
 required to model modern GWAS cohorts~\cite[e.g.][]{martin2017,zaidi2020}.
 These simulation methods are all based on the ``succinct tree
-sequence'' ARG encoding~\citep{ralph2020,wong2023general},
-using the open-source \texttt{tskit} library.
+sequence'' ARG encoding~\citep{wong2023general},
+using the open-source \texttt{tskit} library~\citep{ralph2020}.
 
 An important property of the succinct tree sequence ARG encoding
 used by these population genetic simulators is that it allows us to
@@ -208,7 +207,7 @@ needing to decode the actual variation data.
 
 There are therefore sophisticated methods available for simulating
 ARGs at the population scale, but there is currently no
-easy way to generate quantitative traits based on such an ARG.
+easy way to simulate quantitative traits based on such an ARG.
 Existing methods to simulate quantitative traits from a given set of
 genetic sequences in standard formats~\citep[e.g.][]{meyer2018,fernandes2020}
 are overwhelmed by the scale of the data. For example,
@@ -226,13 +225,13 @@ very large scale, it is tightly coupled to the details of their study
 and not designed to be reused.
 Simulation code can be subtle and difficult to
 debug~\citep{ragsdale2020lessons}, and there
-is therefore a critical need for a well-documented and
+is a critical need for a well-documented and
 thoroughly tested means of simulating quantitative
 traits directly from an ARG.
 
 In this paper we present \texttt{tstrait}, a new Python library that
 efficiently simulates quantitative traits on an arbitrary ARG
-in \texttt{tskit}~\citep{ralph2020} format.
+in \texttt{tskit} format.
 \texttt{Tstrait} can
 quickly simulate quantitative traits for population-scale datasets,
 with a very low memory overhead. This approach also provides a
@@ -240,7 +239,8 @@ richer model than existing methods,
 allowing us to, for example, simulate traits for
 ancestral individuals as well as contemporary samples.
 The \texttt{tstrait} library also integrates well with the wider
-Python data-science ecosytem, allowing users to efficiently analyse
+Python data-science ecosystem~\citep{numpy}, 
+allowing users to efficiently analyse
 large-scale data using familiar and ergonomic tools.
 
 \section{Results}
@@ -249,7 +249,7 @@ large-scale data using familiar and ergonomic tools.
 \includegraphics[width=240pt]{figures/tree-illustration.pdf}
 \caption{Example simulation of a phenotype at a site with ancestral state A and
 two mutations. In this diploid example each of the three individuals
-is assocated with two nodes (i.e., the individual with ID 0 corresponds
+is associated with two nodes (i.e., the individual with ID 0 corresponds
 to nodes \textsf{a} and \textsf{b}). Internal nodes in the tree are associated
 with the null individual, $-1$. Here, the trait's causal allele is T
 and effect size $\beta=0.05$. Each node in the tree has an associated
@@ -262,11 +262,11 @@ simulated environmental noise.
 
 \subsection{Model}
 Phenotypes are simulated in \texttt{tstrait} following standard
-models, adapted to the ARG context (Fig~\ref{fig:tree-illustration}).
+models~\citep{uffelmann2021}, adapted to the ARG context (Fig~\ref{fig:tree-illustration}).
 Each trait is associated with one or more causal sites (position
 on the genome), and at each causal site there is a causal allele
 (i.e.\ a particular nucleotide). Because we are reasoning
-about the inheritance of alleles at a site on the genome
+about the inheritance of alleles at a site on the genome,
 we can consider just the local tree at that site and
 the network structure of the ARG is not important~\citep{wong2023general}.
 In Fig.~\ref{fig:tree-illustration} we show the local tree
@@ -286,13 +286,13 @@ Fig.~\ref{fig:tree-illustration}, T is chosen as the causal
 allele, and therefore all nodes descending from \textsf{i}
 have genetic value $0.05$, except \textsf{e} which
 has zero because of the back-mutation to A.
-Following the standard practise in GWAS~\citep{uffelmann2021}
+Following the standard practise in GWAS~\citep{uffelmann2021},
 we assume the additive model such that the overall
 genetic value of an individual is the sum of its
 nodes' genetic values.
 Given these per-individual genetic values, the final phenotype
 is then generated by adding some environmental noise.
-This noise is normally distributed with mean zero
+This noise is simulated from a normal distribution with mean zero
 and variance of $V_G(1-h^2)/{h^2}$,
 % TODO I find this clearer than saying "additive genetic variance"
 where $V_G$ is the variance of the individual genetic values
@@ -325,7 +325,7 @@ The return value \texttt{result} is an object encapsulating
 two Pandas dataframes~\citep{pandas}: one describing the simulated
 effect sizes and the other describing the genetic values,
 environmental noise and final phenotypes for each individual.
-The simulation results can then be efficiently and conventiently
+The simulation results can then be efficiently and conveniently
 processed by a host of Python data science tools.
 
 This simple usage is not very flexible, however,
@@ -423,6 +423,9 @@ the entire dataset fits in RAM.
 Supplementary Fig~\ref{fig:time}B shows that RAM usage is very
 modest for all these simulations.
 
+% TODO this is to be rewritten with just a single example from FC
+% dataset and optionally also mentioning real data from 1000G (space
+% permitting).
 Figure \ref{fig:time} (B) shows simulation time of \texttt{tstrait} with more
 realistic data. For example, \texttt{tstrait} is used to simulate traits from
 2.7 million individuals in the French Canadian dataset, which is the largest
