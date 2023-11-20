@@ -132,9 +132,9 @@ mahajan2022,yengo2022,mathieson2023},
 and GWAS results are actively being incorporated into clinical
 practice~\citep{visscher2017}.
 This success has led to the collection of many population-scale Biobank
-datasets~\citep{tanjo2021practical}, 
+datasets~\citep{tanjo2021practical},
 but the sampling and resulting vast volumes of data
-are presenting significant challenges to GWAS 
+are presenting significant challenges to GWAS
 methology~\citep{uffelmann2021}.
 
 Ancestral recombination graphs (ARGs) encode the interwoven paths
@@ -216,9 +216,9 @@ dataset mentioned above would take many days of CPU time,
 making quantitative trait simulation by this approach unfeasible.
 In their analysis of the portability of polygenic risk
 scores across populations, \citet{martin2017}
-demonstrated the ability to simulate phenotypes at scale using ARGs. 
-However, their approach is tightly coupled to the details 
-of the study 
+demonstrated the ability to simulate phenotypes at scale using ARGs.
+However, their approach is tightly coupled to the details
+of the study
 and not designed to be reused.
 Simulation code can be subtle and difficult to
 debug~\citep{ragsdale2020lessons}, and there
@@ -236,7 +236,7 @@ richer model than existing methods,
 allowing us to, for example, simulate traits for
 ancestral individuals as well as contemporary samples.
 The \texttt{tstrait} library also integrates well with the wider
-Python data-science ecosystem~\citep{numpy}, 
+Python data-science ecosystem~\citep{numpy},
 allowing users to efficiently analyse
 large-scale data using familiar and ergonomic tools.
 
@@ -259,28 +259,29 @@ simulated environmental noise.
 
 \subsection{Model}
 Phenotypes are simulated in \texttt{tstrait} following standard
-models~\citep{uffelmann2021}, adapted to the ARG context (Fig~\ref{fig:tree-illustration}).
-Each trait is associated with one or more causal sites (position
-on the genome), and at each causal site there is a causal allele
-(i.e.\ a particular nucleotide). Because we are reasoning
+models~\citep{uffelmann2021}, adapted to the ARG context.
+Each trait is associated with one or more causal sites
+(positions on the genome), and at each causal site there is a causal allele
+(i.e.\ a particular nucleotide) associated with an effect size $\beta$.
+Every node in the local tree that inherits the causal allele
+at that site is said to have a ``genetic value'' of $\beta$.
+Because we are reasoning
 about the inheritance of alleles at a site on the genome,
 we can consider just the local tree at that site and
 the network structure of the ARG is not important~\citep{wong2023general}.
-In Fig.~\ref{fig:tree-illustration} we show the local tree
-relating three diploid individuals for a given causal site.
+
+In Fig.~\ref{fig:tree-illustration} we show an example
+tree for three individuals.
 Because these individuals are diploids, each is associated
 with two nodes in the tree (highlighted by colour).
 Ancestral nodes are not associated with individuals here,
 but in general the ARG may be embedded in a multigenerational
 pedigree, where some internal nodes would be associated
 with individuals.
-
-At a given site, the causal allele is associated with an
-effect size $\beta$,
-and every node in the tree that carries this allele has a
-``genetic value'' of $\beta=0.05$. In the example of
+In the example of
 Fig.~\ref{fig:tree-illustration}, T is chosen as the causal
-allele, and therefore all nodes descending from \textsf{i}
+allele and $\beta=0.05$, and
+therefore all nodes descending from \textsf{i}
 have genetic value $0.05$, except \textsf{e} which
 has zero because of the back-mutation to A.
 Following the standard practise in GWAS~\citep{uffelmann2021},
@@ -308,22 +309,23 @@ very little code:
 \begin{lstlisting}[language=Python]
 import tstrait as tst
 model = tst.trait_model('normal', mean=0, var=1)
-result = tst.sim_phenotype(arg, model, h2=0.3)
+result = tst.sim_phenotype(arg, model)
 \end{lstlisting}
-We first create \texttt{model} representing the distribution
+We first create \texttt{model}, which represents the distribution
 from which effect sizes are drawn. Five commonly used
 univariate distributions are supported, along with the
 multivariate normal distribution to model pleiotropic traits.
 Given this model, we can then simulate phenotypes for the individuals
 in an ARG (as a  \texttt{tskit TreeSequence}) using the
-\texttt{sim\_phenotype} function, which also takes the trait model
-and narrow sense heritability $h^2$ as parameters.
+\texttt{sim\_phenotype} function.
 The return value \texttt{result} is an object encapsulating
 two Pandas dataframes~\citep{mckinney2010data}: one describing the simulated
 effect sizes and the other describing the genetic values,
 environmental noise and final phenotypes for each individual.
 The simulation results can then be efficiently and conveniently
 processed by a host of Python data science tools.
+
+[WIP]
 
 This simple usage is not very flexible, however,
 and so \texttt{tstrait} provides more modular building blocks
