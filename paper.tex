@@ -202,11 +202,11 @@ landmark dataset again in later sections).
 Another substantial benefit of storing simulated datasets
 in this ARG-based format is that many computations can
 be expressed efficiently in terms of the underlying
-ancestry~\citep{kelleher2016efficient,ralph2020}, without
+genealogies~\citep{kelleher2016efficient,ralph2020}, without
 needing to decode the actual variation data.
 
-There are therefore sophisticated methods available for simulating
-ARGs at the population scale, but there is currently no
+Although there are sophisticated methods available for simulating
+ARGs at the population scale, there is currently no
 easy way to simulate quantitative traits based on such an ARG.
 Existing methods to simulate quantitative traits from a given set of
 genetic sequences in standard formats~\citep[e.g.][]{meyer2018,fernandes2020}
@@ -214,14 +214,11 @@ are overwhelmed by the scale of the data. For example,
 just parsing the 280TB of VCF for the French-Canadian
 dataset mentioned above would take many days of CPU time,
 making quantitative trait simulation by this approach unfeasible.
-% TODO this needs another pass. We do need to address the Martin et
-% al thing up front though, I think.
 In their analysis of the portability of polygenic risk
 scores across populations, \citet{martin2017}
-used efficient \texttt{tskit} APIs to simulate quantitative
-traits for 600,000 humans directly from a simulated ARG.
-While the code provided by Martin et al.\ works at this
-very large scale, it is tightly coupled to the details of their study
+demonstrated the ability to simulate phenotypes at scale using ARGs. 
+However, their approach is tightly coupled to the details 
+of the study 
 and not designed to be reused.
 Simulation code can be subtle and difficult to
 debug~\citep{ragsdale2020lessons}, and there
@@ -441,7 +438,7 @@ attract more users in need of conducting genetic simulations with complex
 population structure. Multiple studies highlight the advantages of using the
 ARG data structure in GWAS \citep{link2023tree,nowbandegani2023extremely,zhang2023}.
 ARG data
-structure is becoming increasingly useful in genetic studies, as it is possible
+structures are becoming increasingly useful in genetic studies, as it is possible
 to accurately infer biobank-scale genealogies from sequencing data
 \citep{zhang2023}, and simulate large sample whole-genome sequences with
 spatiotemporal metadata \citep{anderson2023}. These advances in ARG presents a
