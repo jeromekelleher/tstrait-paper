@@ -321,40 +321,37 @@ multivariate normal distribution to model pleiotropic traits.
 Given this model, we can then simulate phenotypes for the individuals
 in an ARG (as a  \texttt{tskit TreeSequence}) using the
 \texttt{sim\_phenotype} function.
-
 The return value \texttt{result} is an object encapsulating
 two Pandas dataframes~\citep{mckinney2010data}: one describing the simulated
 effect sizes and the other describing the genetic values,
 environmental noise and final phenotypes for each individual.
 The simulation results can then be efficiently and conveniently
-processed by a host of Python data science tools.
+processed by a range of familiar Python data science tools.
 
-[WIP]
-
-This simple usage is not very flexible, however,
-and so \texttt{tstrait} provides more modular building blocks
-for power-users, and to potentially integrate with other tools.
-Effect sizes can be simulated for a given ARG and trait model
-using the \texttt{sim\_trait} function.
+As well as this convenient single-function interface,
+\texttt{tstrait} provides modular building blocks for power-users
+and potential integration with other tools that generate
+traits on an ARG. The \texttt{sim\_trait} function
+simulates effect sizes for an input ARG, and returns a data frame
+describing the causal alleles and effect sizes.
 This dataframe can then be passed to the \texttt{genetic\_values}
 function, which calculates the genetic values for each
-node, and accumulates these per individual
+node, and accumulates them by individual
 (Fig~\ref{fig:tree-illustration}). Finally, the \texttt{sim\_env}
 function takes these per-individual genetic values
 and adds some simulated environmental noise to produce the final
-phenotypes (as discussed above).
+phenotypes.
 
-A major benefit of this modular approach to simulating effect sizes
-and genetic values separately is the flexibility this offers
+A major benefit of this modular architecture is the flexibility it offers
 users. Because the causal sites and effect sizes are specified in a
 simple tabular format, users can easily develop their own approach
 to simulating these values. Alternatively, other simulators
 such as SLiM~\citep{haller2023} that generate effect sizes and
 causal mutations during the progress of a forwards-time simulation
 (to model the effect of selection, for example) could output these
-values to a CSV or similar file. The modularity here and simple
-input data format is specifically intended to facilitate such
-interoperability between simulators.
+values to a CSV or similar file. The modular architecture  and simple
+input data formats are specifically intended to facilitate such
+interoperability.
 
 % \subsection{Phenotype}
 % The final phenotype simulation is done in \texttt{tstrait}
