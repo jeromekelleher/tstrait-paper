@@ -157,12 +157,17 @@ and can provide a sparse and efficient model of linkage disequilibirium
 in GWAS and downstream applications~\citep{nowbandegani2023extremely}.
 
 Simulation is a critical component of GWAS method development, and
-generally consists of two steps: (1) generate a synthetic genetic
-variation dataset; and (2) simulate quantitative traits
-based on this dataset.
-(The two steps may sometimes be combined
-in a single simulation, or we may use real data instead of simulations in
-step (2), but the basic principles are still the same.)
+generally consists of two steps.
+Firstly, we must simulate some genetic variation. This is
+usually done either by model-based population genetic
+simulation using methods such as
+\texttt{msprime}~\citep{baumdicker2022efficient}
+or \texttt{SLiM}~\citep{haller2023},
+or by statistical resampling from existing datasets
+using methods like \texttt{HAPGEN2}~\citep{su2011hapgen2}
+or \texttt{HAPNEST}~\citep{wharrie2023hapnest}.
+Secondly, given this genetic variation dataset, we can
+simulate quantitative traits.
 The combined genetic variation and
 simulated quantitative traits then represent the ``truth'' against
 which association testing methods can be evaluated.
@@ -321,6 +326,11 @@ multivariate normal distribution to model pleiotropic traits.
 Given this model, we can then simulate phenotypes for the individuals
 in an ARG (as a  \texttt{tskit TreeSequence}) using the
 \texttt{sim\_phenotype} function.
+The user can either specify a number of causal sites to be chosen randomly
+along the genome (one, by default), or can directly provide the causal
+sites as input. Combined with the detailed information about
+mutations recorded in a \texttt{tskit} ARG, this provides the ability
+to model population and haplotype specific effects.
 The return value \texttt{result} is an object encapsulating
 two Pandas dataframes~\citep{mckinney2010data}: one describing the simulated
 effect sizes and the other describing the genetic values,
@@ -402,18 +412,30 @@ dataset would require 140TB of RAM.
 % also used to measure the computational performance.
 
 \section{Conclusion}
-We believe that in the coming years, simulation in tree sequence encoding will
-attract more users in need of conducting genetic simulations with complex
-population structure. Multiple studies highlight the advantages of using the
-ARG data structure in GWAS \citep{link2023tree,nowbandegani2023extremely,zhang2023}.
-ARG data
-structures are becoming increasingly useful in genetic studies, as it is possible
-to accurately infer biobank-scale genealogies from sequencing data
-\citep{zhang2023}, and simulate large sample whole-genome sequences with
-spatiotemporal metadata \citep{anderson2023}. These advances in ARG presents a
-real opportunity for people to further understand the effects of complex
-population structure on quantitative traits. The \texttt{tstrait} package is an
-essential piece of infrastructure that lets people explore these possibilities.
+[WIP]
+There is a pressing need for large-scale truth datasets to support
+GWAS method development. One approach, exemplified by
+\citet{wharrie2023hapnest}, is to generate synthethic genetic variation
+based on publicly available data and to make these available. While
+there are certainly advantages to this method
+publicly
+
+For example, the \texttt{plink} formatted data file of chromosome 9
+for 1 million individuals provided for download is 78GB.
+
+
+% We believe that in the coming years, simulation in tree sequence encoding will
+% attract more users in need of conducting genetic simulations with complex
+% population structure. Multiple studies highlight the advantages of using the
+% ARG data structure in GWAS \citep{link2023tree,nowbandegani2023extremely,zhang2023}.
+% ARG data
+% structures are becoming increasingly useful in genetic studies, as it is possible
+% to accurately infer biobank-scale genealogies from sequencing data
+% \citep{zhang2023}, and simulate large sample whole-genome sequences with
+% spatiotemporal metadata \citep{anderson2023}. These advances in ARG presents a
+% real opportunity for people to further understand the effects of complex
+% population structure on quantitative traits. The \texttt{tstrait} package is an
+% essential piece of infrastructure that lets people explore these possibilities.
 
 \section{Competing interests}
 No competing interest is declared.
