@@ -132,14 +132,15 @@ Genome-wide association studies (GWAS)
 identify genetic variants that are statistically
 associated with a specific trait~\citep{uffelmann2021}.
 Many loci that are associated with various human diseases and
-traits have been identified~\citep{locke2015,ishigaki2022,
-mahajan2022,yengo2022,mathieson2023},
+traits have been
+identified~\citep[e.g.][]{yengo2022,mathieson2023},
+% \citep{locke2015,ishigaki2022,
+% mahajan2022,yengo2022,mathieson2023},
 and GWAS results are actively being incorporated into clinical
 practice~\citep{visscher2017}.
 This success has led to the collection of many population-scale Biobank
 datasets~\citep{tanjo2021practical},
-but the sampling and resulting vast volumes of data
-are presenting significant challenges to GWAS
+but such scale is presenting significant challenges to GWAS
 methology~\citep{uffelmann2021}.
 
 Ancestral recombination graphs (ARGs) encode the interwoven paths
@@ -162,8 +163,12 @@ and can provide a sparse and efficient model of linkage disequilibirium
 in GWAS and downstream applications~\citep{nowbandegani2023extremely}.
 
 Simulation is a critical component of GWAS method development, and
-generally consists of two steps.
-Firstly, we must simulate some genetic variation. This is
+generally consists of first simulating some genetic
+variation, and then simulating quantitative traits based on it.
+The combined genetic variation and
+simulated quantitative traits then represent truth-data
+which association testing methods can be evaluated against.
+Simulating genetic variation is
 usually done either by model-based population genetic
 simulation using methods such as
 \texttt{msprime}~\citep{baumdicker2022efficient}
@@ -171,26 +176,26 @@ or \texttt{SLiM}~\citep{haller2023},
 or by statistical resampling from existing datasets
 using methods like \texttt{HAPGEN2}~\citep{su2011hapgen2}
 or \texttt{HAPNEST}~\citep{wharrie2023hapnest}.
-Secondly, given this genetic variation dataset, we can
-simulate quantitative traits.
-The combined genetic variation and
-simulated quantitative traits then represent the ``truth'' against
-which association testing methods can be evaluated.
-The first step, of generating realistic, large-scale genetic variation
-datasets, is a well-studied problem with a mature and robust supporting
-software ecosystem. ARG-based methods~\citep{kelleher2016efficient,
-kelleher2018efficient,haller2018tree,adrion2020,baumdicker2022efficient,anderson2023}
-have been instrumental in making population genetic simulations
-of the scale and realism
-required to model modern GWAS cohorts~\cite[e.g.][]{martin2017,zaidi2020}.
-These simulation methods are all based on the ``succinct tree
-sequence'' ARG encoding~\citep{wong2023general},
-using the open-source \texttt{tskit} library~\citep{ralph2020}.
+Both approaches have advantages and disadvantages.
+Roughly speaking, model-based
+simulation methods provide better control of
+population processes such as demography but can be overly simplistic,
+whereas resampling methods better capture some of the nuance of
+real data, while lacking a direct connection to population genetics models.
+Model-based population genetic simulations have made
+great strides in recent years, with major advances in both
+scalability~\citep{kelleher2016efficient,kelleher2018efficient,haller2018tree}
+and realism~\citep{adrion2020,anderson2023}, and
+have been successfully used to model large-scale GWAS
+cohorts~\cite[e.g.][]{martin2017,zaidi2020}.
 
-An important property of the succinct tree sequence ARG encoding
-used by these population genetic simulators is that it allows us to
-store enormous genetic variation datasets compactly. Instead of
-storing the genetic sequence variation in the conventional
+An important part of these simulation methods is that they
+output ARGs using
+the ``succinct tree sequence'' encoding~\citep{wong2023general}
+and the open-source \texttt{tskit} library~\citep{ralph2020}.
+A key benefit of this approach is that it allows us to
+store enormous genetic variation datasets compactly.
+Instead of storing the genetic sequence variation in the conventional
 matrix-based form~\citep[e.g.\ VCF,][]{danecek2011},
 we can store the underlying genealogical history
 and mutations that ultimately \emph{result} in the observed
