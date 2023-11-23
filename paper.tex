@@ -95,14 +95,19 @@ infer ARGs at the population scale, and there is now intense interest
 in applying ARG-based methods across a broad range of applications.
 Genome-wide association studies (GWAS) are one of the most important
 application areas, with ARG-based methods already providing substantial
-improvements over the state-of-the-art. The ability to efficiently
-simulate quantitative traits is critical to developing
-and evaluating new GWAS methods, but existing simulators do not scale
-to modern datasets and cannot be directly applied to ARGs.
-We present the \texttt{tstrait} package,
+improvements over the state-of-the-art.
+Sophisticated methods exist to simulate ARGs based on a variety
+of population genetic models, but there is currently no method
+to simulate quantitative traits directly from these ARGs.
+To apply existing quantitative trait simulators users must export
+genotype data, losing important information about ancestral processes
+contained in the ARG and producing large files when applied
+to Biobank-scale datasets.
+We present \texttt{tstrait},
 an open-source Python library to simulate
 quantitative traits on ARGs, and show how this user-friendly software
-can be easily applied to vast, population-scale datasets.
+can quickly simulate phenotypes for population-scale datasets
+on a laptop computer.
 \\\textbf{Availability and Implementation:} \texttt{tstrait} is available
 for download on the Python Package Index.
 Full documentation with examples and workflow
