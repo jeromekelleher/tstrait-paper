@@ -291,7 +291,7 @@ tree for three individuals.
 Because these individuals are diploids, each is associated
 with two nodes in the tree (highlighted by colour).
 Ancestral nodes are not associated with individuals here,
-but in general the ARG may be embedded in a multigenerational
+but in general an ARG may be embedded in a multigenerational
 pedigree, where some internal nodes would be associated
 with individuals.
 In the example of
@@ -313,7 +313,7 @@ and $h^2$ is the narrow-sense heritability provided as input by the user.
 
 \subsection{Interface}
 \texttt{Tstrait} is a Python library, building on the \texttt{tskit}
-ARG library~\citep{ralph2020,wong2023general} and the rich
+ARG toolkit~\citep{ralph2020,wong2023general} and the rich
 Python data-science ecosystem~\citep{numpy}.
 Simulating a phenotype for an ARG with default parameter
 values requires only a few lines of code:
@@ -334,21 +334,23 @@ in an ARG (as a  \texttt{tskit TreeSequence}) using the
 The user can either specify a number of causal sites to be chosen randomly
 along the genome (one, by default), or can directly provide the causal
 sites as input. Combined with the detailed information about
-mutations recorded in a \texttt{tskit} ARG, this provides the ability
-to model population and haplotype specific effects.
+mutations recorded in a \texttt{tskit} ARG, explicitly specifying causal
+sites allows us to model many different types of trait, for example
+those associated with mutations arising in a particular population
+or time interval.
 The return value \texttt{result} is an object encapsulating
 two Pandas dataframes~\citep{mckinney2010data}: one describing the simulated
 effect sizes and the other describing the genetic values,
 environmental noise and final phenotypes for each individual.
 The simulation results can then be efficiently and conveniently
-processed by a range of familiar Python data science tools.
+processed using familiar Python data science tools.
 
 As well as this convenient single-function interface,
 \texttt{tstrait} provides modular building blocks for power-users
-and potential integration with other tools that generate
+and to facilitate integration with other tools that generate
 traits on an ARG. The \texttt{sim\_trait} function
 simulates effect sizes for an input ARG, and returns a data frame
-describing the causal alleles and effect sizes.
+describing the causal sites, alleles and effect sizes.
 This dataframe can then be passed to the \texttt{genetic\_values}
 function, which calculates the genetic values for each
 node, and accumulates them by individual
@@ -363,7 +365,7 @@ simple tabular format, users can easily develop their own approach
 to simulating these values. Alternatively, other simulators
 such as SLiM~\citep{haller2023} that generate effect sizes and
 causal mutations during the progress of a forwards-time simulation
-(to model the effect of selection, for example) could output these
+could output these
 values to a CSV or similar file. The modular architecture  and simple
 input data formats are specifically intended to facilitate such
 interoperability.
@@ -393,28 +395,18 @@ with 1000 causal sites on this ARG using \texttt{tstrait},
 and report the mean CPU time over 10 independent replicates.
 Supplementary Fig~\ref{fig:time}B shows that RAM usage is very
 modest for all these simulations.
-A comparison with existing methods that require reading
-in genetic sequences in formats such as
-VCF~\citep[e.g.][]{meyer2018,fernandes2020} is not feasible,
-as the VCFs involved are very large, and these tools assume that
-the entire dataset fits in RAM.
-To emphasise this point, we also generated
-quantitative traits for the simulations based on
-the French-Canadian pedigree~\citet{anderson2023}, discussed in
-the introduction. It took 60 seconds and XXX GB of RAM to
-simulate a trait with 1000 causal sites using \texttt{tstrait}.
-Using one byte per genotype, the full variant matrix of this
-dataset would require 140TB of RAM.
-% If we have space, mention the real-data sims
-
-% Figure \ref{fig:time} (B) shows simulation time of \texttt{tstrait} with more
-% realistic data. For example, \texttt{tstrait} is used to simulate traits from
-% 2.7 million individuals in the French Canadian dataset, which is the largest
-% known simulated genetic dataset \citep{anderson2023}. It took 60 seconds to
-% simulate a trait with 1000 causal sites, making \texttt{tstrait} to be
-% practical to simulate quantitative traits from this largest ever simulated
-% dataset. The inferred ARG from the 1000 Genomes project \citep{kelleher2019} is
-% also used to measure the computational performance.
+To demonstrate its scalability we  applied \texttt{tstrait} to the
+French-Canadian simulations~\cite{anderson2023} of chromosome 9
+discussed in the introduction.
+% TODO redo this for 100 causal sites @daiki.
+It took 6 seconds and XXX GB of RAM to
+simulate a trait with 100 causal sites using \texttt{tstrait}.
+% Is this worth the space? We should cite 1KG project also really.
+Finally, to demonstrate that \texttt{tstrait} can also be applied
+to ARGs inferred from real data, we simulated a trait with 100 causal
+sites for the ARG estimated from chromosome 9 of the 1000 Genomes
+project data~\citep{kelleher2019} which has YYY samples
+and ZZZ variant sites. This took 0.X seconds and Y GB of RAM.
 
 \section{Conclusion}
 [WIP]
