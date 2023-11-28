@@ -41,7 +41,6 @@
 %\usepackage{showframe}
 \usepackage{fontenc}
 
-
 \usepackage{graphicx}
 
 % line numbers
@@ -141,7 +140,7 @@ practice~\citep{visscher2017}.
 This success has led to the collection of many population-scale Biobank
 datasets~\citep{tanjo2021practical},
 but such scale is presenting significant challenges to GWAS
-methology~\citep{uffelmann2021}.
+methodology~\citep{uffelmann2021}.
 
 Ancestral recombination graphs (ARGs) encode the interwoven paths
 of genetic inheritance arising from
@@ -159,7 +158,7 @@ can detect more ultra rare variants than conventional association testing
 methods~\citep{zhang2023};
 have better power to detect causal loci in
 quantitative-trait locus mapping~\citep{link2023tree};
-and can provide a sparse and efficient model of linkage disequilibirium
+and can provide a sparse and efficient model of linkage disequilibrium
 in GWAS and downstream applications~\citep{nowbandegani2023extremely}.
 
 Simulation is a critical component of GWAS method development, and
@@ -319,7 +318,7 @@ Simulating a phenotype for an ARG with default parameter
 values requires only a few lines of code:
 % NOTE this listing assumes num_causal has been moved, or removed.
 % We need to check whether this actually works in the final version.
-\begin{lstlisting}[language=Python]
+\begin{lstlisting}[language=Python,aboveskip=1em,belowskip=1em]
 import tstrait as tst
 model = tst.trait_model('normal', mean=0, var=1)
 result = tst.sim_phenotype(arg, model)
@@ -386,53 +385,38 @@ of \texttt{AlphaSimR}~\citep{gaynor2021} and
 \texttt{Tstrait} is very efficient, and can be applied to datasets at the
 largest scales.
 Supplementary Fig~\ref{fig:time}A shows how trait simulation time scales
-with number of individuals, for sequences of length 50, 100 and 200Mb.
-For each sample size and sequence length,
-we first simulate an ARG under a simple coalescent model with
-human-like parameters using~\texttt{stdpopsim}~\citep{adrion2020}.
-We then run a quantitative trait simulation
-with 1000 causal sites on this ARG using \texttt{tstrait},
+with number of individuals on human-like coalescent simulations
+generated using~\texttt{stdpopsim}~\citep{adrion2020}.
+For each simulated ARG, we simulate a trait with 1000 causal sites
 and report the mean CPU time over 10 independent replicates.
 Supplementary Fig~\ref{fig:time}B shows that RAM usage is very
-modest for all these simulations.
-To demonstrate its scalability we  applied \texttt{tstrait} to the
-French-Canadian simulations~\cite{anderson2023} of chromosome 9
-discussed in the introduction.
+modest. To emphasise scalability, we also
+applied \texttt{tstrait} to the simulations of 1.4 million
+French-Canadians discussed in the introduction.
 % TODO redo this for 100 causal sites @daiki.
 It took 6 seconds and XXX GB of RAM to
-simulate a trait with 100 causal sites using \texttt{tstrait}.
+simulate a trait with 100 causal sites.
 % Is this worth the space? We should cite 1KG project also really.
 Finally, to demonstrate that \texttt{tstrait} can also be applied
 to ARGs inferred from real data, we simulated a trait with 100 causal
-sites for the ARG estimated from chromosome 9 of the 1000 Genomes
-project data~\citep{kelleher2019} which has YYY samples
+sites for an ARG estimated from 1000 Genomes project
+data~\citep{kelleher2019} which has YYY samples
 and ZZZ variant sites. This took 0.X seconds and Y GB of RAM.
 
 \section{Conclusion}
-[WIP]
-There is a pressing need for large-scale truth datasets to support
-GWAS method development. One approach, exemplified by
-\citet{wharrie2023hapnest}, is to generate synthethic genetic variation
-based on publicly available data and to make these available. While
-there are certainly advantages to this method
-publicly
-
-For example, the \texttt{plink} formatted data file of chromosome 9
-for 1 million individuals provided for download is 78GB.
-
-
-% We believe that in the coming years, simulation in tree sequence encoding will
-% attract more users in need of conducting genetic simulations with complex
-% population structure. Multiple studies highlight the advantages of using the
-% ARG data structure in GWAS \citep{link2023tree,nowbandegani2023extremely,zhang2023}.
-% ARG data
-% structures are becoming increasingly useful in genetic studies, as it is possible
-% to accurately infer biobank-scale genealogies from sequencing data
-% \citep{zhang2023}, and simulate large sample whole-genome sequences with
-% spatiotemporal metadata \citep{anderson2023}. These advances in ARG presents a
-% real opportunity for people to further understand the effects of complex
-% population structure on quantitative traits. The \texttt{tstrait} package is an
-% essential piece of infrastructure that lets people explore these possibilities.
+There is substantial interest in using inferred ARGs to improve
+association testing
+methods~\citep{zhang2023,link2023tree,nowbandegani2023extremely},
+and there is a pressing need for a well-tested, efficient
+and user-friendly means of simulating phenotypes on ARGs.
+Highly realistic simulations conditioned on large
+pedigrees~\citep{anderson2023} provide an exciting opportunity
+to test the effects of intricate population structure on
+GWAS, and we hope that \texttt{tstrait} will facilitate these
+investigations. \texttt{Tstrait}'s modular architecture
+and flexible specification of causal sites
+should provide the opportunity to explore new avenues of research,
+and an extensible platform for future development.
 
 \section{Competing interests}
 No competing interest is declared.
