@@ -90,28 +90,26 @@ Ancestral recombination graphs (ARGs) encode the ensemble of correlated
 genealogical trees arising from recombination in a compact and efficient
 structure, and are of fundamental importance in population and statistical
 genetics. Recent breakthroughs have made it possible to simulate and
-infer ARGs at the population scale, and there is now intense interest
-in applying ARG-based methods across a broad range of applications.
-Genome-wide association studies (GWAS) are one of the most important
-application areas, with ARG-based methods already providing substantial
-improvements over the state-of-the-art.
-Sophisticated methods exist to simulate ARGs based on a variety
-of population genetic models, but there is currently no method
+infer ARGs at biobank scale, and there is now intense interest
+in using ARG-based methods across a broad range of applications,
+particularly in genome-wide association studies (GWAS).
+Sophisticated methods exist to simulate ARGs using
+population genetics models, but there is currently no software
 to simulate quantitative traits directly from these ARGs.
 To apply existing quantitative trait simulators users must export
 genotype data, losing important information about ancestral processes
-and producing large files when applied
-to Biobank-scale datasets.
+and producing prohibitively large files when applied
+to the biobank-scale datasets currently of interest in GWAS.
 We present \texttt{tstrait},
 an open-source Python library to simulate
 quantitative traits on ARGs, and show how this user-friendly software
-can quickly simulate phenotypes for Biobank-scale datasets
+can quickly simulate phenotypes for biobank-scale datasets
 on a laptop computer.
 \\\textbf{Availability and Implementation:} \texttt{tstrait} is available
 for download on the Python Package Index.
 Full documentation with examples and workflow
 templates is available on \url{https://tskit.dev/tstrait/docs/}, and the
-development version is maintained on Github
+development version is maintained on GitHub
 (\url{https://github.com/tskit-dev/tstrait}).\\ \textbf{Contact:}
 \href{daiki.tagami@hertford.ox.ac.uk}{daiki.tagami@hertford.ox.ac.uk}\\
 }
