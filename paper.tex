@@ -135,29 +135,11 @@ identified~\citep[e.g.][]{yengo2022,mathieson2023},
 % mahajan2022,yengo2022,mathieson2023},
 and GWAS results are actively being incorporated into clinical
 practice~\citep{visscher2017}.
-This success has led to the collection of many population-scale Biobank
-datasets~\citep{tanjo2021practical},
-but such scale is presenting significant challenges to GWAS
-methodology~\citep{uffelmann2021}.
-
-Ancestral recombination graphs (ARGs) encode the interwoven paths
-of genetic inheritance arising from
-% Explanation of citations: people might get offended if we don't cite
-% Griffiths when first mentioning the ARG, but Hudson has just as
-% much to do with the actual definition that we use in Wong 2023.
-recombination~\citep{hudson1983properties,griffiths1997ancestral,wong2023general},
-and recent
-breakthroughs in inference have opened many new possibilities for their
-practical application~\citep{lewanski2023era}.
-Building on these recent developments, substantial progress has been made
-on statistical genetics applications.
-For example,  ARG-based methods
-can detect more ultra rare variants than conventional association testing
-methods~\citep{zhang2023};
-have better power to detect causal loci in
-quantitative-trait locus mapping~\citep{link2023tree};
-and can provide a sparse and efficient model of linkage disequilibrium
-in GWAS and downstream applications~\citep{nowbandegani2023extremely}.
+The great success of GWAS has prompted the collection of many biobank
+datasets consisting of hundreds of thousands of
+participants~\citep{tanjo2021practical},
+but this scale presents significant challenges to
+current GWAS methodology~\citep{uffelmann2021}.
 
 Simulation is a critical component of GWAS method development, and
 generally consists of two steps:
@@ -187,16 +169,38 @@ and realism~\citep{adrion2020,anderson2023}, and
 have been successfully used to simulate large-scale GWAS
 cohorts~\cite[e.g.][]{martin2017,zaidi2020}.
 
-An important property of these modern simulation methods is that
-they output ARGs rather than genotypes \citep[e.g.\ as VCF,][]{danecek2011}.
-Using the succinct tree sequence ARG encoding~\citep{wong2023general}
-and the open-source \texttt{tskit} library~\citep{ralph2020},
-these ARG methods can simulate genetic variation for millions of
-samples and store the output very compactly.
+An important property of these population genetic simulation methods is that
+they output ancestral recombination graphs (ARGs)
+rather than sample genotypes.
+ARGs encode the interwoven paths
+of genetic inheritance arising from
+% Explanation of citations: people might get offended if we don't cite
+% Griffiths when first mentioning the ARG, but Hudson has just as
+% much to do with the actual definition that we use in Wong 2023.
+recombination~\citep{hudson1983properties,griffiths1997ancestral,wong2023general},
+and contain rich detail about ancestral processes.
+Recent breakthroughs in inferrence methods have made it possible
+to estimate ARGs at biobank scale~\citep{kelleher2019,zhang2023},
+and there is now intense interest in their practical
+application~\citep{lewanski2023era}.
+Statistical genetics has been a particular focus,
+and ARG-based methods have been shown
+to detect more ultra rare variants than conventional association testing
+methods~\citep{zhang2023};
+have better power to detect causal loci in
+quantitative-trait locus mapping~\citep{link2023tree};
+and to provide a sparse and efficient model of linkage disequilibrium
+in GWAS and downstream applications~\citep{nowbandegani2023extremely}.
+
+ARG-based methods can simulate genetic variation for millions of
+samples and store the output very compactly
+using the ``succinct tree sequence'' encoding~\citep{wong2023general}.
+and \texttt{tskit} library~\citep{ralph2020}.
 For example, a highly realistic simulation
 of chromosome 9 for 1.4 million
 French-Canadian individuals~\citep{anderson2023}
-requires around 550GB of storage space in gzip-compressed VCF.
+requires around 550GB of storage space in gzip-compressed
+VCF~\citep{danecek2011}.
 At 1.36GB the original simulated ARG
 (compressed using the \texttt{tszip} utility) is around 400X smaller.
 Furthermore, many computations can
@@ -207,12 +211,12 @@ Finally, outputting a simulated ARG provides access to the full
 history, not just the genetic variation among the samples.
 
 Although there are sophisticated methods available for simulating
-ARGs at the population scale, there is currently no
+ARGs at biobank scale, there is currently no
 easy way to simulate quantitative traits based on such an ARG.
 Many existing methods to simulate quantitative traits from a given set of
 genetic sequences assume that the genotypes fit in
 memory~\citep[e.g.][]{meyer2018,fernandes2020}, which makes them
-impractical at Biobank scale (e.g., the French-Canadian dataset discussed
+impractical at biobank scale (the French-Canadian dataset discussed
 above would require 140TB of RAM assuming 1 byte per genotype).
 Methods that read parts of the genotype matrix from file as
 required~\citep[e.g.][]{wharrie2023hapnest} can be used on
@@ -233,15 +237,13 @@ is a critical need for a well-documented and
 thoroughly tested means of simulating quantitative
 traits directly from an ARG.
 
-In this paper we present \texttt{tstrait}, a new Python library that
-efficiently simulates quantitative traits on an arbitrary ARG
-in \texttt{tskit} format.
+In this paper we present \texttt{tstrait}, a Python library that
+efficiently simulates quantitative traits on an arbitrary ARG.
+% in \texttt{tskit} format.
 \texttt{Tstrait} can
 quickly simulate quantitative traits for population-scale datasets,
-with a very low memory overhead. This approach also provides a
-richer model than existing methods,
-allowing us to, for example, simulate traits for
-ancestral individuals as well as contemporary samples.
+with a very low memory overhead, and taking into account
+the rich historical detail contained within an ARG.
 The \texttt{tstrait} library also integrates well with the wider
 Python data-science ecosystem~\citep{numpy},
 allowing users to efficiently analyse
